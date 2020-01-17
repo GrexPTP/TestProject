@@ -9,7 +9,7 @@ import TextInput from '../../components/TextInput';
 import BackButton from '../../components/BackButton';
 import { theme } from '../../core/theme';
 import { emailValidator, passwordValidator } from '../../core/utils';
-import config from '../../constant';
+
 
 
 
@@ -26,18 +26,17 @@ const LoginPage = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
-    }).then(response => response.json())
-    .then(results => {
-
-        if (results) {
-            navigation.navigate('HomePage');
-            setGlobal({user: results})
-
-        } 
-        return
-    })
-   
+    
+    // fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
+    // }).then(response => response.json())
+    // .then(results => {
+    //     if (results) {
+    //         navigation.navigate('HomePage');
+    //         setGlobal({user: results})
+    //     } 
+    //     return
+    // })
+    navigation.navigate('HomePage');
   };
 
   return (
