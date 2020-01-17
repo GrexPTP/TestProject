@@ -1,5 +1,4 @@
 import React, { memo, useState } from 'react';
-import {setGlobal} from 'reactn'
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Background from '../../components/Background';
 import Logo from '../../components/Logo';
