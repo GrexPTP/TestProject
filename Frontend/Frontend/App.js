@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import SignUpSignInPage from './pages/SignUpSignInPage'
 
 const AuthenRouter = createStackNavigator(
   {
