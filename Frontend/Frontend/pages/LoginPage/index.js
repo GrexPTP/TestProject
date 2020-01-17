@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import Background from '../../components/Background';
 import Logo from '../../components/Logo';
 import Header from '../../components/Header';
@@ -16,6 +16,11 @@ const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
   const [user, setUser] = useState(null)
+  const signInAsync = async () => {
+    await AsyncStorage.setItem('userToken', 'abc');
+    navigation.navigate('App');
+  };
+
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
@@ -25,7 +30,7 @@ const LoginPage = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    
+    signInAsync()
     // fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
     // }).then(response => response.json())
     // .then(results => {
@@ -35,7 +40,6 @@ const LoginPage = ({ navigation }) => {
     //     } 
     //     return
     // })
-    navigation.navigate('HomePage');
   };
 
   return (

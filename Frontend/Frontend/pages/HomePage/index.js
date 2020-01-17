@@ -1,9 +1,16 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, AsyncStorage} from 'react-native'
+import { Button } from 'react-native-paper';
 
-const HomePage = () => (
-    <View style={{flex:1}}>
-        <Text>HomePage</Text>
-    </View>
-)
+const HomePage = ({navigation}) => {
+   const signOutAsync = async () => {
+        await AsyncStorage.clear();
+        navigation.navigate('Auth');
+      };
+    return (
+        <View style={{flex:1}}>
+            <Button onPress={() => signOutAsync()}>Sign Out</Button>
+        </View>
+    )
+}
 export default HomePage
