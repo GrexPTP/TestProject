@@ -7,16 +7,10 @@ import rootReducer from './reducers'
 
 const persistConfig = {
   key: 'root',
-  AsyncStorage,
+  storage:AsyncStorage,
 }
-const middlewares = [];
-if(process.env.NODE_ENV === 'development'){
-    middlewares.push(logger)
-}
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const middlewares = [logger];
 
-export default () => {
-  let store = createStore(persistedReducer, applyMiddleware(...middlewares))
-  let persistor = persistStore(store)
-  return { store, persistor }
-}
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+export const store = createStore(persistedReducer, applyMiddleware(...middlewares))
+export const persistor = persistStore(store)
