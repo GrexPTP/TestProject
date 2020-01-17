@@ -4,11 +4,10 @@ export const googleSignInStart = () => ({
     type: AuthActionTypes.GOOGLE_SIGN_IN_START
 });
 
-export const signInSuccess = (user, token) => ({
+export const signInSuccess = (user) => ({
     type: AuthActionTypes.SIGN_IN_SUCCESS,
     payload: {
-        user,
-        token
+        user
     }
 });
 

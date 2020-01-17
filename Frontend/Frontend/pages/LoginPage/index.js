@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react';
+import {useDispatch, useSelector} from 'react-redux'
 import { TouchableOpacity, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import Background from '../../components/Background';
 import Logo from '../../components/Logo';
@@ -8,14 +9,14 @@ import TextInput from '../../components/TextInput';
 import BackButton from '../../components/BackButton';
 import { theme } from '../../core/theme';
 import { emailValidator, passwordValidator } from '../../core/utils';
-
+import {signInSuccess} from '../../redux/reducers/AuthReducer/actions'
 
 
 
 const LoginPage = ({ navigation }) => {
+  const dispatch = useDispatch()
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
-  const [user, setUser] = useState(null)
   const signInAsync = async () => {
     await AsyncStorage.setItem('userToken', 'abc');
     navigation.navigate('App');
@@ -30,6 +31,7 @@ const LoginPage = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
+    dispatch(signInSuccess({email, password}))
     signInAsync()
     // fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
     // }).then(response => response.json())
