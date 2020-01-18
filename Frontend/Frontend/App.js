@@ -14,6 +14,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import {store, persistor} from './redux/store'
 import ProfilePage from  './pages/ProfilePage'
 import {Ionicons} from '@expo/vector-icons';
+import SearchPage from './pages/SearchPage';
 
 
 
@@ -25,7 +26,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
   let IconComponent = Ionicons;
   if (routeName === 'Home') {
     iconName = `ios-home`;
-  } else if (routeName === 'Events' ) {
+  } else if (routeName === 'Users' ) {
     iconName = `ios-list`;
   } else if (routeName === 'Profile' ) {
     iconName = `ios-person`;
@@ -59,6 +60,9 @@ const EmployeeRouter = createBottomTabNavigator({
   Home: {
     screen: HomePage
   },
+  Users: {
+    screen: SearchPage
+  },
   Profile: {
       screen: ProfilePage
   }
@@ -76,6 +80,9 @@ const EmployeeRouter = createBottomTabNavigator({
 const AdminRouter = createBottomTabNavigator({
   Home: {
     screen: HomePage
+  },
+  Employee: {
+    screen: SearchPage
   },
   Profile: {
       screen: ProfilePage
@@ -106,7 +113,8 @@ const AppContainer = createAppContainer(createSwitchNavigator(
     AuthLoading: AuthLoadingPage,
     User: UserRouter,
     Auth: AuthRouter,
-    Employee: EmployeeRouter
+    Employee: EmployeeRouter,
+    Admin: AdminRouter
   },
   {
     initialRouteName: 'AuthLoading',

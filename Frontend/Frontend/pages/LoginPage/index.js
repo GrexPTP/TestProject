@@ -31,7 +31,7 @@ const LoginPage = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    dispatch(signInSuccess({email, password, role : 'user'}))
+    dispatch(signInSuccess({email, password, role : 'Employee'}))
     signInAsync()
     // fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
     // }).then(response => response.json())
