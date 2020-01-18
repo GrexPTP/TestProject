@@ -13,6 +13,84 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {store, persistor} from './redux/store'
 import ProfilePage from  './pages/ProfilePage'
+import {Ionicons} from '@expo/vector-icons';
+
+
+
+
+
+const getTabBarIcon = (navigation, focused, tintColor) => {
+  const { routeName } = navigation.state;
+  let iconName;
+  let IconComponent = Ionicons;
+  if (routeName === 'Home') {
+    iconName = `ios-home`;
+  } else if (routeName === 'Events' ) {
+    iconName = `ios-list`;
+  } else if (routeName === 'Profile' ) {
+    iconName = `ios-person`;
+  } else if (routeName === 'MyEvents') {
+    iconName = `ios-filing`;
+  } else {
+    iconName = `ios-map`
+  }
+  // You can return any component that you like here!
+  return <IconComponent name={iconName} size={25} color={tintColor} />;
+};
+const UserRouter = createBottomTabNavigator({
+  Home: {
+    screen: HomePage
+  },
+  Profile: {
+      screen: ProfilePage
+  }
+}, {
+  initialRouteName: "Home",
+  defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) =>
+        getTabBarIcon(navigation, focused, tintColor),
+    }),
+    tabBarOptions: {
+      activeTintColor: 'purple',
+      inactiveTintColor: 'gray',
+    },
+});
+const EmployeeRouter = createBottomTabNavigator({
+  Home: {
+    screen: HomePage
+  },
+  Profile: {
+      screen: ProfilePage
+  }
+}, {
+  initialRouteName: "Home",
+  defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) =>
+        getTabBarIcon(navigation, focused, tintColor),
+    }),
+    tabBarOptions: {
+      activeTintColor: 'purple',
+      inactiveTintColor: 'gray',
+    },
+});
+const AdminRouter = createBottomTabNavigator({
+  Home: {
+    screen: HomePage
+  },
+  Profile: {
+      screen: ProfilePage
+  }
+}, {
+  initialRouteName: "Home",
+  defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) =>
+        getTabBarIcon(navigation, focused, tintColor),
+    }),
+    tabBarOptions: {
+      activeTintColor: 'purple',
+      inactiveTintColor: 'gray',
+    },
+});
 const AuthRouter = createStackNavigator(
   {
     SignUpSignInPage,
@@ -23,21 +101,6 @@ const AuthRouter = createStackNavigator(
     headerMode: 'none'
   }
 );
-const UserRouter = createStackNavigator({
-  ProfilePage
-},{
-  headerMode: 'none'
-})
-const EmployeeRouter = createStackNavigator({
-  HomePage
-},{
-  headerMode: 'none'
-})
-const AdminRouter = createStackNavigator({
-  HomePage
-},{
-  headerMode: 'none'
-})
 const AppContainer = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoadingPage,

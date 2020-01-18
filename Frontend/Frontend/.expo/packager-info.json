@@ -2,8 +2,8 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 1600,
-  "expoServerNgrokUrl": "https://t2-mks.phatpt-dev.frontend.exp.direct",
-  "packagerNgrokUrl": "https://packager.t2-mks.phatpt-dev.frontend.exp.direct",
-  "ngrokPid": 15808
+  "packagerPid": 19552,
+  "expoServerNgrokUrl": "https://4g-wy7.phatpt-dev.frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.4g-wy7.phatpt-dev.frontend.exp.direct",
+  "ngrokPid": 19544
 }
