@@ -19,7 +19,7 @@ const LoginPage = ({ navigation }) => {
   const [password, setPassword] = useState({ value: '', error: '' });
   const signInAsync = async () => {
     await AsyncStorage.setItem('userToken', 'abc');
-    navigation.navigate('App');
+    navigation.navigate('User');
   };
 
   const _onLoginPressed = () => {
@@ -31,7 +31,7 @@ const LoginPage = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    dispatch(signInSuccess({email, password}))
+    dispatch(signInSuccess({email, password, role : 'user'}))
     signInAsync()
     // fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
     // }).then(response => response.json())

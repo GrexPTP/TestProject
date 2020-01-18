@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   View,
@@ -17,7 +16,7 @@ const AuthLoadingScreen = ({navigation}) => {
     const userToken = await AsyncStorage.getItem('userToken');
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    navigation.navigate(userToken ? 'App' : 'Auth');
+    navigation.navigate(userToken ? 'User' : 'Auth');
   };
 
   // Render any loading content that you like here
@@ -28,3 +27,4 @@ const AuthLoadingScreen = ({navigation}) => {
       </View>
     );
 }
+export default AuthLoadingScreen

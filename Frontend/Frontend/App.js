@@ -12,25 +12,43 @@ import AuthLoadingPage from './pages/AuthLoadingPage'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {store, persistor} from './redux/store'
+import ProfilePage from  './pages/ProfilePage'
 const AuthRouter = createStackNavigator(
   {
     SignUpSignInPage,
     LoginPage,
     RegisterPage,
     ForgotPasswordPage,
+  },{
+    headerMode: 'none'
   }
 );
-const AppRouter = createStackNavigator({
+const UserRouter = createStackNavigator({
+  ProfilePage
+},{
+  headerMode: 'none'
+})
+const EmployeeRouter = createStackNavigator({
   HomePage
+},{
+  headerMode: 'none'
+})
+const AdminRouter = createStackNavigator({
+  HomePage
+},{
+  headerMode: 'none'
 })
 const AppContainer = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoadingPage,
-    App: AppRouter,
-    Auth: AuthRouter
+    User: UserRouter,
+    Auth: AuthRouter,
+    Employee: EmployeeRouter
   },
   {
-    initialRouteName: 'AuthLoading'
+    initialRouteName: 'AuthLoading',
+    
+    
   }
 ))
 const App = () => {

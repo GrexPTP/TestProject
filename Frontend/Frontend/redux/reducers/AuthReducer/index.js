@@ -3,7 +3,8 @@ import AuthActionTypes from "./types";
 const INITIAL_STATE = {
     currentUser: null,
     error: null,
-    token: null
+    token: null,
+    role: 'user'
 };
 
 const authReducer = (state = INITIAL_STATE, action) => {
@@ -13,6 +14,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 currentUser: action.payload.user,
                 token: action.payload.token,
+                role: action.payload.user.role,
                 error: null
             };
         case AuthActionTypes.SIGN_OUT_SUCCESS:
@@ -20,6 +22,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 currentUser: null,
                 token: null,
+                role: null,
                 error: null
             };
         case AuthActionTypes.SIGN_IN_FAILURE:
