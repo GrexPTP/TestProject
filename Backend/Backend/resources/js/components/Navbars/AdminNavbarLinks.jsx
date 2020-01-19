@@ -17,6 +17,7 @@
 */
 import React, { Component } from "react";
 import { NavItem, Nav, NavDropdown, MenuItem } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 class AdminNavbarLinks extends Component {
   render() {
@@ -53,9 +54,7 @@ class AdminNavbarLinks extends Component {
           </NavItem>
         </Nav>
         <Nav pullRight>
-          <NavItem eventKey={1} href="#">
-            Account
-          </NavItem>
+          <li role="presentation" class=""><NavLink to="/admin/profile">Account</NavLink></li>
           <NavDropdown
             eventKey={2}
             title="Dropdown"
@@ -69,7 +68,7 @@ class AdminNavbarLinks extends Component {
             <MenuItem divider />
             <MenuItem eventKey={2.5}>Separated link</MenuItem>
           </NavDropdown>
-          <NavItem eventKey={3} href="#">
+          <NavItem eventKey={3} href="logout">
             Log out
           </NavItem>
         </Nav>

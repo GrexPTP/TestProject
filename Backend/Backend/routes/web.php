@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/{catchall?}', function () {
     return view('welcome');
-});
+})->where('catchall', '^(?!api).*$')->name('administration');
+// Route::get('*', function () {
+//     return view('welcome');
+// });

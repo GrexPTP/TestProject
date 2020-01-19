@@ -64,13 +64,12 @@ class Admin extends Component {
       title: <span data-notify="icon" className="pe-7s-gift" />,
       message: (
         <div>
-          Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-          every web developer.
+          Welcome to Dashboard page.
         </div>
       ),
       level: level,
       position: position,
-      autoDismiss: 15
+      autoDismiss: 5
     });
   };
   getRoutes = routes => {
@@ -82,6 +81,7 @@ class Admin extends Component {
             render={props => (
               <prop.component
                 {...props}
+                objectName={prop.name}
                 handleClick={this.handleNotificationClick}
               />
             )}
@@ -146,13 +146,12 @@ class Admin extends Component {
       title: <span data-notify="icon" className="pe-7s-gift" />,
       message: (
         <div>
-          Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-          every web developer.
+          Welcome to Dashboard page.
         </div>
       ),
       level: level,
       position: "tr",
-      autoDismiss: 15
+      autoDismiss: 5
     });
   }
   componentDidUpdate(e) {
@@ -183,7 +182,7 @@ class Admin extends Component {
           />
           <Switch>{this.getRoutes(routes)}</Switch>
           <Footer />
-          <FixedPlugin
+          {/* <FixedPlugin
             handleImageClick={this.handleImageClick}
             handleColorClick={this.handleColorClick}
             handleHasImage={this.handleHasImage}
@@ -192,7 +191,7 @@ class Admin extends Component {
             mini={this.state["mini"]}
             handleFixedClick={this.handleFixedClick}
             fixedClasses={this.state.fixedClasses}
-          />
+          /> */}
         </div>
       </div>
     );

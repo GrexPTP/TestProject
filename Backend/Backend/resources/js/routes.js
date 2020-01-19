@@ -30,57 +30,80 @@ const dashboardRoutes = [
     name: "Dashboard",
     icon: "pe-7s-graph",
     component: Dashboard,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
   },
   {
-    path: "/user",
+    path: "/profile",
     name: "User Profile",
     icon: "pe-7s-user",
     component: UserProfile,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
   },
   {
-    path: "/table",
-    name: "Table List",
-    icon: "pe-7s-note2",
+    path: "/users/:id",
+    name: "User Detail",
+    icon: "pe-7s-users",
+    component: UserProfile,
+    layout: "/admin",
+    visible: false
+  },
+  {
+    path: "/users",
+    name: "Users",
+    icon: "pe-7s-users",
     component: TableList,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
+  },
+  {
+    path: "/employees/:id",
+    name: "Employee Detail",
+    icon: "pe-7s-users",
+    component: UserProfile,
+    layout: "/admin",
+    visible: false
+  },
+  {
+    path: "/employees",
+    name: "Employees",
+    icon: "pe-7s-smile",
+    component: TableList,
+    layout: "/admin",
+    visible: true
   },
   {
     path: "/typography",
     name: "Typography",
     icon: "pe-7s-news-paper",
     component: Typography,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
   },
   {
     path: "/icons",
     name: "Icons",
     icon: "pe-7s-science",
     component: Icons,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
   },
   {
     path: "/maps",
     name: "Maps",
     icon: "pe-7s-map-marker",
     component: Maps,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
   },
   {
     path: "/notifications",
     name: "Notifications",
     icon: "pe-7s-bell",
     component: Notifications,
-    layout: "/admin"
-  },
-  {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "pe-7s-rocket",
-    component: Upgrade,
-    layout: "/admin"
+    layout: "/admin",
+    visible: true
   }
 ];
 
