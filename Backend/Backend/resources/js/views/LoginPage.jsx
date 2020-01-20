@@ -1,22 +1,26 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {Form, FormGroup, Col, FormControl, Checkbox, Button, ControlLabel, Grid, PageHeader} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 
-export default class Login extends Component {
-    render() {
+const Login = () => {
+        const [email, setEmail] = useState('')
+        const [password, setPassword] = useState('')
+        const submitHandler = (e) => {
+            e.preventDefault()
+            console.log(email, password)
+        }
         return (
-            
             <Grid style={{padding:'10% 20%'}}>
                 <PageHeader>
                     Dashboard Login
                 </PageHeader>;
-                <Form horizontal>
+<Form horizontal>
   <FormGroup controlId="formHorizontalEmail">
     <Col componentClass={ControlLabel} sm={2}>
       Email
     </Col>
     <Col sm={10}>
-      <FormControl type="email" placeholder="Email" />
+      <FormControl value={email} type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
     </Col>
   </FormGroup>
 
@@ -25,7 +29,7 @@ export default class Login extends Component {
       Password
     </Col>
     <Col sm={10}>
-      <FormControl type="password" placeholder="Password" />
+      <FormControl value={password} type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
     </Col>
   </FormGroup>
 
@@ -40,12 +44,13 @@ export default class Login extends Component {
 
   <FormGroup>
     <Col smOffset={2} sm={10}>
-      <Button type="submit">Sign in</Button>
+      <Button type="submit" onClick={(e) => submitHandler(e)}>Sign in</Button>
     </Col>
   </FormGroup>
 </Form>
 
             </Grid>
         );
-    }
+    
 }
+export default Login
