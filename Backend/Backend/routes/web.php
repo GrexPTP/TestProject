@@ -11,9 +11,10 @@
 |
 */
 
-Route::get('/{catchall?}', function () {
+Route::get('/', function () {
     return view('welcome');
-})->where('catchall', '^(?!api).*$')->name('administration');
-// Route::get('*', function () {
-//     return view('welcome');
-// });
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
