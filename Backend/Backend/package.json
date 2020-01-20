@@ -32,7 +32,7 @@
     },
     "dependencies": {
         "babel-loader": "^8.0.6",
-        "bootstrap": "3.3.7",
+        "bootstrap": "3.4.1",
         "chartist": "0.10.1",
         "node-sass": "4.12.0",
         "react": "16.8.6",
