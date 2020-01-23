@@ -16,7 +16,7 @@
 
 */
 /*eslint-disable*/
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Toggle from "react-toggle";
 
 import imagine1 from "../../assets/img/sidebar-1.jpg";
@@ -24,27 +24,22 @@ import imagine2 from "../../assets/img/sidebar-2.jpg";
 import imagine3 from "../../assets/img/sidebar-3.jpg";
 import imagine4 from "../../assets/img/sidebar-4.jpg";
 
-class FixedPlugin extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      classes: "dropdown show-dropdown open",
-      bg_checked: true,
-      bgImage: this.props.bgImage
-    };
-  }
-  handleClick = () => {
-    this.props.handleFixedClick();
+const FixedPlugin = (props) => {
+  const [classes, setClasses] = useState("dropdown show-dropdown open")
+  const [bg_checked, setBg_checked] = useState(true)
+  const [bgImage, setBgImage] = useState(props.bgImage)
+  const handleClick = () => {
+    props.handleFixedClick();
   };
-  onChangeClick = () => {
-    this.props.handleHasImage(!this.state.bg_checked);
-    this.setState({ bg_checked: !this.state.bg_checked });
+  const onChangeClick = () => {
+    props.handleHasImage(!this.state.bg_checked);
+    setBgImage(!bg_checked)
   };
-  render() {
+  
     return (
       <div className="fixed-plugin">
-        <div id="fixedPluginClasses" className={this.props.fixedClasses}>
-          <div onClick={this.handleClick}>
+        <div id="fixedPluginClasses" className={props.fixedClasses}>
+          <div onClick={handleClick}>
             <i className="fa fa-cog fa-2x" />
           </div>
           <ul className="dropdown-menu">
@@ -53,8 +48,8 @@ class FixedPlugin extends Component {
               <p className="pull-left">Background Image</p>
               <div className="pull-right">
                 <Toggle
-                  defaultChecked={this.state.bg_checked}
-                  onChange={this.onChangeClick}
+                  defaultChecked={bg_checked}
+                  onChange={onChangeClick}
                 />
               </div>
               <div className="clearfix" />
@@ -65,68 +60,68 @@ class FixedPlugin extends Component {
                 <div className="pull-right">
                   <span
                     className={
-                      this.props.bgColor === "black"
+                      props.bgColor === "black"
                         ? "badge filter active"
                         : "badge filter"
                     }
                     data-color="black"
                     onClick={() => {
-                      this.props.handleColorClick("black");
+                      props.handleColorClick("black");
                     }}
                   />
                   <span
                     className={
-                      this.props.bgColor === "azure"
+                      props.bgColor === "azure"
                         ? "badge filter badge-azure active"
                         : "badge filter badge-azure"
                     }
                     data-color="azure"
                     onClick={() => {
-                      this.props.handleColorClick("azure");
+                      props.handleColorClick("azure");
                     }}
                   />
                   <span
                     className={
-                      this.props.bgColor === "green"
+                      props.bgColor === "green"
                         ? "badge filter badge-green active"
                         : "badge filter badge-green"
                     }
                     data-color="green"
                     onClick={() => {
-                      this.props.handleColorClick("green");
+                      props.handleColorClick("green");
                     }}
                   />
                   <span
                     className={
-                      this.props.bgColor === "orange"
+                      props.bgColor === "orange"
                         ? "badge filter badge-orange active"
                         : "badge filter badge-orange"
                     }
                     data-color="orange"
                     onClick={() => {
-                      this.props.handleColorClick("orange");
+                      props.handleColorClick("orange");
                     }}
                   />
                   <span
                     className={
-                      this.props.bgColor === "red"
+                      props.bgColor === "red"
                         ? "badge filter badge-red active"
                         : "badge filter badge-red"
                     }
                     data-color="red"
                     onClick={() => {
-                      this.props.handleColorClick("red");
+                      props.handleColorClick("red");
                     }}
                   />
                   <span
                     className={
-                      this.props.bgColor === "purple"
+                      props.bgColor === "purple"
                         ? "badge filter badge-purple active"
                         : "badge filter badge-purple"
                     }
                     data-color="purple"
                     onClick={() => {
-                      this.props.handleColorClick("purple");
+                      props.handleColorClick("purple");
                     }}
                   />
                 </div>
@@ -134,45 +129,45 @@ class FixedPlugin extends Component {
               </a>
             </li>
             <li className="header-title">Sidebar Images</li>
-            <li className={this.state["bgImage"] === imagine1 ? "active" : ""}>
+            <li className={bgImage === imagine1 ? "active" : ""}>
               <a
                 className="img-holder switch-trigger"
                 onClick={() => {
-                  this.setState({ bgImage: imagine1 });
-                  this.props.handleImageClick(imagine1);
+                  setBgImage(imagine1)
+                  props.handleImageClick(imagine1);
                 }}
               >
                 <img src={imagine1} alt="..." />
               </a>
             </li>
-            <li className={this.state["bgImage"] === imagine2 ? "active" : ""}>
+            <li className={bgImage === imagine2 ? "active" : ""}>
               <a
                 className="img-holder switch-trigger"
                 onClick={() => {
-                  this.setState({ bgImage: imagine2 });
-                  this.props.handleImageClick(imagine2);
+                  setBgImage(imagine2);
+                  props.handleImageClick(imagine2);
                 }}
               >
                 <img src={imagine2} alt="..." />
               </a>
             </li>
-            <li className={this.state["bgImage"] === imagine3 ? "active" : ""}>
+            <li className={bgImage === imagine3 ? "active" : ""}>
               <a
                 className="img-holder switch-trigger"
                 onClick={() => {
-                  this.setState({ bgImage: imagine3 });
-                  this.props.handleImageClick(imagine3);
+                  setBgImage(imagine3);
+                  props.handleImageClick(imagine3);
                 }}
               >
                 <img src={imagine3} alt="..." />
               </a>
             </li>
-            <li className={this.state["bgImage"] === imagine4 ? "active" : ""}>
+            <li className={bgImage === imagine4 ? "active" : ""}>
               <a
                 className="img-holder switch-trigger"
                 onClick={() => {
-                  this.setState({ bgImage: imagine4 });
-                  this.props.handleImageClick(imagine4);
+                  setBgImage(imagine4)
+                  handleImageClick(imagine4);
                 }}
               >
                 <img src={imagine4} alt="..." />
@@ -214,7 +209,6 @@ class FixedPlugin extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default FixedPlugin;

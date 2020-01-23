@@ -15,10 +15,10 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 
-export class UserCard extends Component {
-  render() {
+const UserCard = () => {
+  
     return (
       <div className="card card-user">
         <div className="image">
@@ -42,7 +42,6 @@ export class UserCard extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default UserCard;

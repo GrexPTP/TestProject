@@ -15,38 +15,36 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 
-export class Card extends Component {
-  render() {
+const Card = (props) => {
     return (
-      <div className={"card" + (this.props.plain ? " card-plain" : "")}>
-        <div className={"header" + (this.props.hCenter ? " text-center" : "")}>
-          <h4 className="title">{this.props.title}</h4>
-          <p className="category">{this.props.category}</p>
+      <div className={"card" + (props.plain ? " card-plain" : "")}>
+        <div className={"header" + (props.hCenter ? " text-center" : "")}>
+          <h4 className="title">{props.title}</h4>
+          <p className="category">{props.category}</p>
         </div>
         <div
           className={
             "content" +
-            (this.props.ctAllIcons ? " all-icons" : "") +
-            (this.props.ctTableFullWidth ? " table-full-width" : "") +
-            (this.props.ctTableResponsive ? " table-responsive" : "") +
-            (this.props.ctTableUpgrade ? " table-upgrade" : "")
+            (props.ctAllIcons ? " all-icons" : "") +
+            (props.ctTableFullWidth ? " table-full-width" : "") +
+            (props.ctTableResponsive ? " table-responsive" : "") +
+            (props.ctTableUpgrade ? " table-upgrade" : "")
           }
         >
-          {this.props.content}
+          {props.content}
 
           <div className="footer">
-            {this.props.legend}
-            {this.props.stats != null ? <hr /> : ""}
+            {props.legend}
+            {props.stats != null ? <hr /> : ""}
             <div className="stats">
-              <i className={this.props.statsIcon} /> {this.props.stats}
+              <i className={props.statsIcon} /> {props.stats}
             </div>
           </div>
         </div>
       </div>
     );
-  }
 }
 
 export default Card;

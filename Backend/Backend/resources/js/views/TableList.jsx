@@ -15,26 +15,25 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 import { Grid, Row, Col, Table, Form, FormControl, Button } from "react-bootstrap";
-import {Redirect} from 'react-router-dom'
 import Card from "../components/Card/Card.jsx";
 import { thArray, tdArray } from "../variables/Variables.jsx";
 
-class TableList extends Component {
-  edit = (id) => {
-    this.props.history.push(`/admin/${this.props.objectName.toLowerCase()}/${id}`)
+const TableList = (props) => {
+  const edit = (id) => {
+    props.history.push(`/admin/${props.objectName.toLowerCase()}/${id}`)
   }
-  delete = (id) => {
+  const deleteObject = id => {
     console.log(`${id} delete`)
   }
-  add = () => {
-    this.props.history.push('/admin/profile')
+  const add = () => {
+    props.history.push('/admin/profile')
   }
-  download = (id) => {
+  const download = (id) => {
     console.log(`${id} download image`)
   }
-  render() {
+  
     return (
       <div className="content">
         <Grid fluid>
@@ -44,13 +43,13 @@ class TableList extends Component {
                 <Col md={11}>
               <Form inline>
               <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-              <Button onClick={this.add}>Add</Button>
+              <Button onClick={add}>Add</Button>
             </Form>
                 </Col>
               </Row>
               <Card
-                title={`${this.props.objectName} List`}
-                category={`List of ${this.props.objectName}`}
+                title={`${props.objectName} List`}
+                category={`List of ${props.objectName}`}
                 ctTableFullWidth
                 ctTableResponsive
                 content={
@@ -71,13 +70,13 @@ class TableList extends Component {
                               return <td key={key}>{prop}</td>;
                             })}
                             <td>
-                              <Button bsStyle="link" onClick={() => this.edit(prop[0])}>
+                              <Button bsStyle="link" onClick={() => edit(prop[0])}>
                                 <i className='pe-7s-pen'></i>
                                 </Button>
-                              <Button bsStyle="link" onClick={() => this.delete(prop[0])}>
+                              <Button bsStyle="link" onClick={() => deleteObject(prop[0])}>
                                 <i className='pe-7s-delete-user'></i>
                                 </Button>
-                                <Button bsStyle="link" onClick={() => this.download(prop[0])}>
+                                <Button bsStyle="link" onClick={() => download(prop[0])}>
                                   <i className='pe-7s-download'></i>
                                   </Button>
                                 </td>
@@ -93,7 +92,6 @@ class TableList extends Component {
         </Grid>
       </div>
     );
-  }
 }
 
 export default TableList;

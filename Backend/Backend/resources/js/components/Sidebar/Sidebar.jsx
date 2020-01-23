@@ -15,42 +15,40 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 import AdminNavbarLinks from "../Navbars/AdminNavbarLinks.jsx";
 
 import logo from "../../assets/img/reactlogo.png";
 
-class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      width: window.innerWidth
-    };
+const Sidebar = (props) => {
+  const [width, setWidth] = useState(window.innerWidth)
+  
+  const activeRoute = routeName => {
+    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   }
-  activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
+  const updateDimensions = () => {
+    setWidth(window.innerWidth)
   }
-  updateDimensions() {
-    this.setState({ width: window.innerWidth });
-  }
-  componentDidMount() {
-    this.updateDimensions();
-    window.addEventListener("resize", this.updateDimensions.bind(this));
-  }
-  render() {
+  useEffect(() => {
+    updateDimensions()
+    //window.addEventListener("resize", this.updateDimensions.bind(this));
+    
+  }, [])
+  
+  
     const sidebarBackground = {
-      backgroundImage: "url(" + this.props.image + ")"
+      backgroundImage: "url(" + props.image + ")"
     };
     return (
       <div
         id="sidebar"
         className="sidebar"
-        data-color={this.props.color}
-        data-image={this.props.image}
+        data-color={props.color}
+        data-image={props.image}
       >
-          {this.props.hasImage ? (
+          {props.hasImage ? (
             <div className="sidebar-background" style={sidebarBackground} />
           ) : (
             null
@@ -73,15 +71,15 @@ class Sidebar extends Component {
         </div>
         <div className="sidebar-wrapper">
           <ul className="nav">
-            {this.state.width <= 991 ? <AdminNavbarLinks /> : null}
-            {this.props.routes.map((prop, key) => {
+            {width <= 991 ? <AdminNavbarLinks /> : null}
+            {props.routes.map((prop, key) => {
               if (!prop.redirect && prop.visible)
                 return (
                   <li
                     className={
                       prop.upgrade
                         ? "active active-pro"
-                        : this.activeRoute(prop.layout + prop.path)
+                        : activeRoute(prop.layout + prop.path)
                     }
                     key={key}
                   >
@@ -101,7 +99,6 @@ class Sidebar extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default Sidebar;

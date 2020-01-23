@@ -26,5 +26,5 @@
         <div id="root">  
         </div>
     </body>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:8000/js/app.js"></script>
 </html>

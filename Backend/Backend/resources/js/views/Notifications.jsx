@@ -15,13 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 import { Grid, Row, Col, Alert } from "react-bootstrap";
 
 import Button from "../components/CustomButton/CustomButton.jsx";
 
-class Notifications extends Component {
-  render() {
+const Notifications = () => {
     return (
       <div className="content">
         <Grid fluid>
@@ -197,7 +196,6 @@ class Notifications extends Component {
         </Grid>
       </div>
     );
-  }
 }
 
 export default Notifications;

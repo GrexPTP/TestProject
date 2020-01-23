@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Row,
@@ -25,26 +25,20 @@ import {
   FormControl
 } from "react-bootstrap";
 
-import { Card } from "../components/Card/Card.jsx";
-import { FormInputs } from "../components/FormInputs/FormInputs.jsx";
-import { UserCard } from "../components/UserCard/UserCard.jsx";
+import Card from "../components/Card/Card.jsx";
+import FormInputs  from "../components/FormInputs/FormInputs.jsx";
+import UserCard from "../components/UserCard/UserCard.jsx";
 import Button from "../components/CustomButton/CustomButton.jsx";
 import ImageUploader from 'react-images-upload';
 import avatar from "../assets/img/faces/face-3.jpg";
 
-class UserProfile extends Component {
-  constructor(){
-    super();
-    this.state = {
-      pictures: [],
-    }
-    this.onDrop = this.onDrop.bind(this);
-  }
-  onDrop(pictureFiles, pictureDataURLs) {
-		this.setState({
-            pictures: this.state.pictures.concat(pictureFiles),
-        })}
-  render() {
+const UserProfile = () => {
+  const [pictures, setPictures] = useState([])
+  
+  const onDrop = (pictureFiles, pictureDataURLs) => {
+    setPictures[pictures.concat(pictureFiles)]
+	}
+  
     return (
       <div className="content">
         <Grid fluid>
@@ -102,7 +96,7 @@ class UserProfile extends Component {
                           <ImageUploader
                 	withIcon={true}
                 	buttonText='Choose images'
-                	onChange={this.onDrop}
+                	onChange={onDrop}
                 	imgExtension={['.jpg', '.gif', '.png', '.gif']}
                   maxFileSize={5242880}
                   withPreview={true}
@@ -118,7 +112,7 @@ class UserProfile extends Component {
                           <ImageUploader
                 	withIcon={true}
                 	buttonText='Choose images'
-                	onChange={this.onDrop}
+                	onChange={onDrop}
                 	imgExtension={['.jpg', '.gif', '.png', '.gif']}
                   maxFileSize={5242880}
                   withPreview={true}
@@ -131,7 +125,7 @@ class UserProfile extends Component {
                           <ImageUploader
                 	withIcon={true}
                 	buttonText='Choose images'
-                	onChange={this.onDrop}
+                	onChange={onDrop}
                 	imgExtension={['.jpg', '.gif', '.png', '.gif']}
                   maxFileSize={5242880}
                   withPreview={true}
@@ -165,7 +159,6 @@ class UserProfile extends Component {
         </Grid>
       </div>
     );
-  }
 }
 
 export default UserProfile;

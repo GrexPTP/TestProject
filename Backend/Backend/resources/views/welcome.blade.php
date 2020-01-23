@@ -26,5 +26,5 @@
         <div id="root">  
         </div>
     </body>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
 </html>

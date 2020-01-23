@@ -15,11 +15,10 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 import { Grid } from "react-bootstrap";
 
-class Footer extends Component {
-  render() {
+const Footer = () => {
     return (
       <footer className="footer">
         <Grid fluid>
@@ -49,7 +48,6 @@ class Footer extends Component {
         </Grid>
       </footer>
     );
-  }
 }
 
 export default Footer;

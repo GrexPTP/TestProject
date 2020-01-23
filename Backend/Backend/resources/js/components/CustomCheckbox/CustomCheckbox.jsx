@@ -15,36 +15,27 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-class CustomCheckbox extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      is_checked: props.isChecked ? true : false
-    };
-    this.handleClick = this.handleClick.bind(this);
+const CustomCheckbox = ({ isChecked, number, label, inline, ...rest }) => {
+  const [is_checked, setIs_checked] = useState(isChecked ? true : false)
+  const handleClick = () => {
+    setIs_checked(!is_checked)
   }
-  handleClick() {
-    this.setState({ is_checked: !this.state.is_checked });
-  }
-  render() {
-    const { isChecked, number, label, inline, ...rest } = this.props;
-    const classes =
-      inline !== undefined ? "checkbox checkbox-inline" : "checkbox";
+    const classes = inline !== undefined ? "checkbox checkbox-inline" : "checkbox";
     return (
       <div className={classes}>
         <input
           id={number}
           type="checkbox"
-          onChange={this.handleClick}
-          checked={this.state.is_checked}
+          onChange={handleClick}
+          checked={is_checked}
           {...rest}
         />
         <label htmlFor={number}>{label}</label>
       </div>
     );
-  }
+  
 }
 
 export default CustomCheckbox;

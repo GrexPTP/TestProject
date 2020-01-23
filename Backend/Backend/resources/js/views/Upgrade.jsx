@@ -22,8 +22,7 @@ import Card from "../components/Card/Card";
 
 import Button from "../components/CustomButton/CustomButton";
 
-class Icons extends Component {
-  render() {
+const Icons = () => {
     return (
       <div className="content">
         <Grid fluid>
@@ -118,7 +117,6 @@ class Icons extends Component {
         </Grid>
       </div>
     );
-  }
 }
 
 export default Icons;

@@ -39,7 +39,7 @@ const CustomMap = withScriptjs(
   ))
 );
 
-function Maps({ ...prop }) {
+const Maps = ({ ...prop }) => {
   return (
     <CustomMap
       googleMapURL="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE"

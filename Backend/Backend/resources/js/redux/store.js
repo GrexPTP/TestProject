@@ -13,9 +13,7 @@ const middlewares = [routerMiddleware(history), sagaMiddleware];
 if(process.env.NODE_ENV === 'development'){
     middlewares.push(logger)
 }
-console.log(rootReducer(history))
 export const store = createStore(persistReducer(persistConfig,rootReducer(history)) , compose(applyMiddleware(...middlewares)));
 
 sagaMiddleware.run(rootSaga);
 export const persistor = persistStore(store);
-console.log(store, persistor)

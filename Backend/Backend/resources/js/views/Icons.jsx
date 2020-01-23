@@ -15,14 +15,14 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 
 import Card from "../components/Card/Card";
 import { iconsArray } from "../variables/Variables.jsx";
 
-class Icons extends Component {
-  render() {
+const Icons = () => {
+  
     return (
       <div className="content">
         <Grid fluid>
@@ -70,7 +70,7 @@ class Icons extends Component {
         </Grid>
       </div>
     );
-  }
+  
 }
 
 export default Icons;

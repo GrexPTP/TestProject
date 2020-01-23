@@ -15,19 +15,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 
-class CustomRadio extends Component {
-  render() {
-    const { number, label, option, name, ...rest } = this.props;
-
+const CustomRadio = ({ number, label, option, name, ...rest }) => {
     return (
       <div className="radio">
         <input id={number} name={name} type="radio" value={option} {...rest} />
         <label htmlFor={number}>{label}</label>
       </div>
     );
-  }
 }
 
 export default CustomRadio;
