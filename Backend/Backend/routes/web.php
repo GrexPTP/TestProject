@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', function () {
+Route::fallback(function () {
     return view('welcome');
 });
 

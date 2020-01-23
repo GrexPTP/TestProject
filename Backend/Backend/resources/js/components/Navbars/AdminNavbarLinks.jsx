@@ -15,12 +15,13 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React from "react";
 import { NavItem, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-
-class AdminNavbarLinks extends Component {
-  render() {
+import {useDispatch} from 'react-redux'
+import {signOutStart} from '../../redux/reducer/authReducer/actions'
+const AdminNavbarLinks = () => {
+    const dispatch = useDispatch()
     const notification = (
       <div>
         <i className="fa fa-globe" />
@@ -29,6 +30,9 @@ class AdminNavbarLinks extends Component {
         <p className="hidden-lg hidden-md">Notification</p>
       </div>
     );
+    const handleLogout = () => {
+      dispatch(signOutStart())
+    }
     return (
       <div>
         <Nav>
@@ -54,7 +58,7 @@ class AdminNavbarLinks extends Component {
           </NavItem>
         </Nav>
         <Nav pullRight>
-          <li role="presentation" class=""><NavLink to="/admin/profile">Account</NavLink></li>
+          <li role="presentation" className=""><NavLink to="/admin/profile">Account</NavLink></li>
           <NavDropdown
             eventKey={2}
             title="Dropdown"
@@ -68,13 +72,13 @@ class AdminNavbarLinks extends Component {
             <MenuItem divider />
             <MenuItem eventKey={2.5}>Separated link</MenuItem>
           </NavDropdown>
-          <NavItem eventKey={3} href="logout">
+          <NavItem eventKey={3} onClick={() => handleLogout()}>
             Log out
           </NavItem>
         </Nav>
       </div>
     );
-  }
+  
 }
 
 export default AdminNavbarLinks;

@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import {Form, FormGroup, Col, FormControl, Checkbox, Button, ControlLabel, Grid, PageHeader} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
+import {useDispatch, useSelector} from 'react-redux'
+import {loginStart} from "../redux/reducer/authReducer/actions";
 
 const Login = () => {
         const [email, setEmail] = useState('')
         const [password, setPassword] = useState('')
+        const dispatch = useDispatch()
         const submitHandler = (e) => {
-            e.preventDefault()
-            console.log(email, password)
-        }
+          e.preventDefault()
+          dispatch(loginStart({email, password}))
+      }
         return (
             <Grid style={{padding:'10% 20%'}}>
                 <PageHeader>

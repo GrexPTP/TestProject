@@ -35,8 +35,8 @@ import {
   legendBar
 } from "../variables/Variables.jsx";
 
-class Dashboard extends Component {
-  createLegend(json) {
+const Dashboard = () =>  {
+  const createLegend = (json) => {
     var legend = [];
     for (var i = 0; i < json["names"].length; i++) {
       var type = "fa fa-circle text-" + json["types"][i];
@@ -46,7 +46,7 @@ class Dashboard extends Component {
     }
     return legend;
   }
-  render() {
+  
     return (
       <div className="content">
         <Grid fluid>
@@ -107,7 +107,7 @@ class Dashboard extends Component {
                   </div>
                 }
                 legend={
-                  <div className="legend">{this.createLegend(legendSales)}</div>
+                  <div className="legend">{createLegend(legendSales)}</div>
                 }
               />
             </Col>
@@ -126,7 +126,7 @@ class Dashboard extends Component {
                   </div>
                 }
                 legend={
-                  <div className="legend">{this.createLegend(legendPie)}</div>
+                  <div className="legend">{createLegend(legendPie)}</div>
                 }
               />
             </Col>
@@ -151,7 +151,7 @@ class Dashboard extends Component {
                   </div>
                 }
                 legend={
-                  <div className="legend">{this.createLegend(legendBar)}</div>
+                  <div className="legend">{createLegend(legendBar)}</div>
                 }
               />
             </Col>
@@ -175,7 +175,7 @@ class Dashboard extends Component {
         </Grid>
       </div>
     );
-  }
+  
 }
 
 export default Dashboard;
