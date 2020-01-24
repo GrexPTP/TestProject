@@ -38,7 +38,7 @@ export function* signOut(){
         yield put(signUpFailure())
     }
 }
-export function* signUp({ payload : {name, email, password, confirmPassword, phone, IDNumber} }) {
+export function* signUp({ payload : {name, email, password, confirmPassword, phone, IDNumber, role_id} }) {
     try {
         const response = yield fetch(`http://127.0.0.1:8000/api/signup`,{
           method: 'post',
@@ -53,7 +53,7 @@ export function* signUp({ payload : {name, email, password, confirmPassword, pho
               c_password: confirmPassword,
               phone,
               id_number: IDNumber,
-              role_id: 1
+              role_id
           })
         })
         const result =  yield response.json()

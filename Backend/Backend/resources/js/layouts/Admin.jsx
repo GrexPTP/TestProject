@@ -18,11 +18,12 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import NotificationSystem from "react-notification-system";
-
+import {connect} from 'react-redux'
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import Footer from "../components/Footer/Footer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin.jsx";
+import {getUserStart} from "../redux/reducer/userReducer/actions"
 
 import { style } from "../variables/Variables.jsx";
 
@@ -153,6 +154,7 @@ class Admin extends Component {
       position: "tr",
       autoDismiss: 5
     });
+    this.props.getUser(this.props.token)
   }
   componentDidUpdate(e) {
     if (
@@ -169,6 +171,7 @@ class Admin extends Component {
     }
   }
   render() {
+    const {token} = this.props
     return (
       <div className="wrapper">
         <NotificationSystem ref="notificationSystem" style={style} />
@@ -176,6 +179,7 @@ class Admin extends Component {
         color={this.state.color}
         hasImage={this.state.hasImage}/>
         <div id="main-panel" className="main-panel" ref="mainPanel">
+
           <AdminNavbar
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}
@@ -197,5 +201,10 @@ class Admin extends Component {
     );
   }
 }
-
-export default Admin;
+const mapStateToProps = state => ({
+  token: state.auth.token
+})
+const mapDispatchToProps = dispatch => ({
+  getUser: token => dispatch(getUserStart(token))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Admin);

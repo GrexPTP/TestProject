@@ -3,10 +3,12 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller; 
 use App\User; 
+
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 class UserController extends Controller 
 {
 public $successStatus = 200;
@@ -58,7 +60,46 @@ if ($validator->fails()) {
      */ 
     public function details(Request $request) 
     {   
-        $user = Auth::user(); 
+        $user = Auth::user();
+        $user['role'] = $user->role()->pluck('role')[0]; 
         return response()->json(['success' => $user], $this-> successStatus); 
     } 
+
+    public function updateProfile(Request $request){
+        $user = Auth::user();
+        $validator = Validator::make($request->all(), [ 
+            'password' => 'nullable', 
+            'c_password' => 'nullable|same:password',
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+        
+        $user->name = $request['name'] ?? $user->name;
+        $user->phone = $request['phone'] ?? $user->phone ;
+        $user->address = $request['address'] ?? $user->address ;
+        $user->id_number = $request['id_number'] ?? $user->id_number ;
+        $user->password = $request['password'] ? bcrypt($request['password']) : $user->password;
+        $avatars = [];
+        $front_id = [];
+        $back_id = [];
+        $uploader = new Util();
+        foreach($request->avaPictures as $image){
+            array_push($avatars, 'image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
+        }
+        foreach($request->frontPictures as $image){
+            array_push($front_id, 'image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
+        }
+        foreach($request->backPictures as $image){
+            array_push($back_id, 'image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
+        }
+        $user->avartar = json_encode($avatars);
+        $user->front_id = json_encode($front_id);
+        $user->back_id = json_encode($back_id);
+        $user->save();
+        return response()->json(['success' => $user], $this-> successStatus); 
+    }
+    
+    
+    
 }

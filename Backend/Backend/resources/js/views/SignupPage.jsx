@@ -14,7 +14,7 @@ const SignUp = () => {
       const dispatch = useDispatch()
       const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(signUpStart({name, email, password, confirmPassword, phone, IDNumber}))
+        dispatch(signUpStart({name, email, password, confirmPassword, phone, IDNumber, role_id: 1}))
     }
       return (
           <Grid style={{padding:'10% 20%'}}>
