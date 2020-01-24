@@ -32,9 +32,7 @@ import ImageUploader from 'react-images-upload';
 import {useSelector, useDispatch} from 'react-redux'
 import {updateProfileStart} from '../redux/reducer/userReducer/actions'
 const UserProfile = () => {
-  const [avaPictures, setAvaPictures] = useState([])
-  const [frontPictures, setFrontPictures] = useState([])
-  const [backPictures, setBackPictures] = useState([])
+  
   
   const dispatch = useDispatch()
   const currentPath = useSelector(state => state.router.location.pathname)
@@ -56,12 +54,17 @@ const UserProfile = () => {
   }
   if (currentPath === '/admin/profile') {
     user = useSelector(state => state.user.user)
+    
   }
+  const [avaPictures, setAvaPictures] = useState(JSON.parse(user.avartar ? user.avartar : '[]' ))
+  const [frontPictures, setFrontPictures] = useState(JSON.parse(user.front_id ?  user.front_id : '[]'))
+  const [backPictures, setBackPictures] = useState(JSON.parse(user.back_id ? user.back_id : '[]'))
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [name, setName] = useState(user.name)
   const [IDNumber, setIDNumber] = useState(user.id_number)
   const [phone, setPhone] = useState(user.phone)
+  
     return (
       <div className="content">
         <Grid fluid>
@@ -135,6 +138,7 @@ const UserProfile = () => {
                         <FormGroup controlId="formControlsTextarea">
                           <ControlLabel>Avatar</ControlLabel>
                           <ImageUploader
+                          defaultImages={avaPictures}
                 	withIcon={true}
                 	buttonText='Choose images'
                 	onChange={onDropAva}
@@ -151,6 +155,8 @@ const UserProfile = () => {
                         <FormGroup controlId="formControlsTextarea">
                           <ControlLabel>Front ID</ControlLabel>
                           <ImageUploader
+                          defaultImages={frontPictures}
+                          singleImage={true}
                 	withIcon={true}
                 	buttonText='Choose images'
                 	onChange={onDropFront}
@@ -164,6 +170,8 @@ const UserProfile = () => {
                         <FormGroup controlId="formControlsTextarea">
                           <ControlLabel>Back ID</ControlLabel>
                           <ImageUploader
+                          defaultImages={backPictures}
+                          singleImage={true}
                 	withIcon={true}
                 	buttonText='Choose images'
                 	onChange={onDropBack}

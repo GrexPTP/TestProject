@@ -85,13 +85,13 @@ if ($validator->fails()) {
         $back_id = [];
         $uploader = new Util();
         foreach($request->avaPictures as $image){
-            array_push($avatars, 'image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
+            array_push($avatars, '/storage/image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
         }
         foreach($request->frontPictures as $image){
-            array_push($front_id, 'image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
+            array_push($front_id, '/storage/image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
         }
         foreach($request->backPictures as $image){
-            array_push($back_id, 'image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
+            array_push($back_id, '/storage/image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
         }
         $user->avartar = json_encode($avatars);
         $user->front_id = json_encode($front_id);
