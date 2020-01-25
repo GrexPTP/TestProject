@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Row,
@@ -31,13 +31,14 @@ import Button from "../components/CustomButton/CustomButton.jsx";
 import ImageUploader from 'react-images-upload';
 import {useSelector, useDispatch} from 'react-redux'
 import {updateProfileStart} from '../redux/reducer/userReducer/actions'
+import {getEmployeeStart} from '../redux/reducer/employeesReducer/actions'
 const UserProfile = () => {
   
   
   const dispatch = useDispatch()
   const currentPath = useSelector(state => state.router.location.pathname)
   const token = useSelector(state => state.auth.token)
-  let user = null
+  let user = {email: '', name: '', id_number: '', phone: '', avartar: "[]", front_id: "[]", back_id: "[]"}
   const onDropAva = (pictureFiles, pictureDataURLs) => {
     setAvaPictures(pictureDataURLs)
   }
@@ -54,8 +55,27 @@ const UserProfile = () => {
   }
   if (currentPath === '/admin/profile') {
     user = useSelector(state => state.user.user)
-    
+  } else {
+    const path = currentPath.split('/')
+    if (path[2] == 'employees'){
+      //user = useSelector(state => state.employees.employee)
+      user = useSelector(state => state.user.user)
+    } else if (path[2] == 'users') {
+
+    }
+
   }
+  useEffect(() => {
+    const path = currentPath.split('/')
+    console.log(path)
+    if (path[2] == 'employees'){
+      dispatch(getEmployeeStart(token, path[3]))
+      
+
+    } else if (path[2] == 'users') {
+
+    }
+  }, [])
   const [avaPictures, setAvaPictures] = useState(JSON.parse(user.avartar ? user.avartar : '[]' ))
   const [frontPictures, setFrontPictures] = useState(JSON.parse(user.front_id ?  user.front_id : '[]'))
   const [backPictures, setBackPictures] = useState(JSON.parse(user.back_id ? user.back_id : '[]'))

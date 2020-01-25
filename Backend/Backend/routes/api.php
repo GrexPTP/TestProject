@@ -15,8 +15,9 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'API\UserController@login');
 Route::post('signup', 'API\UserController@signup');
-Route::post('upload_image', 'API\UserController@uploadImage');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
     Route::post('update_profile', 'API\UserController@updateProfile');
+    Route::post('employees', 'API\EmployeeController@employees');
+    Route::post('employee', 'API\EmployeeController@employee');
 });

@@ -15,12 +15,18 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useState,  useEffect} from "react";
 import { Grid, Row, Col, Table, Form, FormControl, Button } from "react-bootstrap";
 import Card from "../components/Card/Card.jsx";
 import { thArray, tdArray } from "../variables/Variables.jsx";
+import {getEmployeesStart} from '../redux/reducer/employeesReducer/actions'
+import {useDispatch, useSelector} from 'react-redux'
 
 const TableList = (props) => {
+  let users = useSelector(state => state.employees.employees) 
+  if (!users) users = []
+  const token = useSelector(state => state.auth.token)
+  const dispatch = useDispatch()
   const edit = (id) => {
     props.history.push(`/admin/${props.objectName.toLowerCase()}/${id}`)
   }
@@ -33,7 +39,9 @@ const TableList = (props) => {
   const download = (id) => {
     console.log(`${id} download image`)
   }
-  
+  useEffect(() => {
+    dispatch(getEmployeesStart(token))
+  }, [])
     return (
       <div className="content">
         <Grid fluid>
@@ -63,20 +71,21 @@ const TableList = (props) => {
                       
                     </thead>
                     <tbody>
-                      {tdArray.map((prop, key) => {
+                      {users.map((prop, key) => {
                         return (
                           <tr key={key}>
-                            {prop.map((prop, key) => {
-                              return <td key={key}>{prop}</td>;
+                            
+                            {Object.keys(prop).map((item, key) => {
+                              return <td key={key}>{prop[item]}</td>;
                             })}
                             <td>
-                              <Button bsStyle="link" onClick={() => edit(prop[0])}>
+                              <Button bsStyle="link" onClick={() => edit(prop['id'])}>
                                 <i className='pe-7s-pen'></i>
                                 </Button>
-                              <Button bsStyle="link" onClick={() => deleteObject(prop[0])}>
+                              <Button bsStyle="link" onClick={() => deleteObject(prop['id'])}>
                                 <i className='pe-7s-delete-user'></i>
                                 </Button>
-                                <Button bsStyle="link" onClick={() => download(prop[0])}>
+                                <Button bsStyle="link" onClick={() => download(prop['id'])}>
                                   <i className='pe-7s-download'></i>
                                   </Button>
                                 </td>
