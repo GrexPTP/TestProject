@@ -31,14 +31,12 @@ import Button from "../components/CustomButton/CustomButton.jsx";
 import ImageUploader from 'react-images-upload';
 import {useSelector, useDispatch} from 'react-redux'
 import {updateProfileStart} from '../redux/reducer/userReducer/actions'
-import {getIndividualStart} from '../redux/reducer/manageReducer/actions'
+import {getIndividualStart, updateIndividualStart} from '../redux/reducer/manageReducer/actions'
 const UserProfile = () => {
-  
-  
   const dispatch = useDispatch()
   const currentPath = useSelector(state => state.router.location.pathname)
   const token = useSelector(state => state.auth.token)
-  let user = {email: '', name: '', id_number: '', phone: '', avartar: "[]", front_id: "[]", back_id: "[]"}
+  let user = {id: 0, email: '', name: '', id_number: '', phone: '', avartar: "[]", front_id: "[]", back_id: "[]"}
   const onDropAva = (pictureFiles, pictureDataURLs) => {
     setAvaPictures(pictureDataURLs)
   }
@@ -51,7 +49,14 @@ const UserProfile = () => {
   }
   const handleSubmit = e => {
     e.preventDefault()
-    dispatch(updateProfileStart(token, {password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures}))
+    if (currentPath === '/admin/profile') {
+      dispatch(updateProfileStart(token, {password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures}))
+    } else {
+      const path = currentPath.split('/')
+      dispatch(updateIndividualStart(token, {id: path[3] ,password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures}))
+  
+    }
+    
   }
   useEffect(() => {
     const path = currentPath.split('/')

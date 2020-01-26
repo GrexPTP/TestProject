@@ -43,7 +43,6 @@ export function* updateProfile({payload: {token, data}}){
         })
 
         const result = yield response.json()
-        yield console.log(result)
         yield put(updateProfileSuccess(result.success))
     }catch(error){
         yield put(updateProfileFailure(error))

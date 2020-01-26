@@ -20,4 +20,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('update_profile', 'API\UserController@updateProfile');
     Route::post('list', 'API\ManageController@list');
     Route::post('individual', 'API\ManageController@individual');
+    Route::post('update_individual', 'API\ManageController@updateIndividual');
 });

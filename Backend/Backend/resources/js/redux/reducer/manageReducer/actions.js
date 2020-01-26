@@ -29,3 +29,18 @@ export const getIndividualFailure = error => ({
     type: ManageActionTypes.GET_INDIVIDUAL_FAILURE,
     payload: error
 })
+export const updateIndividualStart = (token, data) => ({
+    type: ManageActionTypes.UPDATE_INDIVIDUAL_START,
+    payload: {
+        token,
+        data
+    }
+})
+export const updateIndividualSuccess = individual => ({
+    type: ManageActionTypes.UPDATE_INDIVIDUAL_SUCCESS,
+    payload: individual
+})
+export const updateIndividualFailure = error => ({
+    type: ManageActionTypes.UPDATE_INDIVIDUAL_FAILURE,
+    payload: error
+})
