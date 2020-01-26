@@ -31,7 +31,7 @@ import Button from "../components/CustomButton/CustomButton.jsx";
 import ImageUploader from 'react-images-upload';
 import {useSelector, useDispatch} from 'react-redux'
 import {updateProfileStart} from '../redux/reducer/userReducer/actions'
-import {getEmployeeStart} from '../redux/reducer/employeesReducer/actions'
+import {getIndividualStart} from '../redux/reducer/manageReducer/actions'
 const UserProfile = () => {
   
   
@@ -53,29 +53,18 @@ const UserProfile = () => {
     e.preventDefault()
     dispatch(updateProfileStart(token, {password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures}))
   }
+  useEffect(() => {
+    const path = currentPath.split('/')
+    dispatch(getIndividualStart(token, path[3]))
+  }, [])
   if (currentPath === '/admin/profile') {
     user = useSelector(state => state.user.user)
   } else {
-    const path = currentPath.split('/')
-    if (path[2] == 'employees'){
-      //user = useSelector(state => state.employees.employee)
-      user = useSelector(state => state.user.user)
-    } else if (path[2] == 'users') {
-
-    }
+    const temp = useSelector(state => state.manage.individual)
+    if (temp) user = temp
 
   }
-  useEffect(() => {
-    const path = currentPath.split('/')
-    console.log(path)
-    if (path[2] == 'employees'){
-      dispatch(getEmployeeStart(token, path[3]))
-      
-
-    } else if (path[2] == 'users') {
-
-    }
-  }, [])
+  
   const [avaPictures, setAvaPictures] = useState(JSON.parse(user.avartar ? user.avartar : '[]' ))
   const [frontPictures, setFrontPictures] = useState(JSON.parse(user.front_id ?  user.front_id : '[]'))
   const [backPictures, setBackPictures] = useState(JSON.parse(user.back_id ? user.back_id : '[]'))

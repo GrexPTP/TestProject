@@ -18,6 +18,6 @@ Route::post('signup', 'API\UserController@signup');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
     Route::post('update_profile', 'API\UserController@updateProfile');
-    Route::post('employees', 'API\EmployeeController@employees');
-    Route::post('employee', 'API\EmployeeController@employee');
+    Route::post('list', 'API\ManageController@list');
+    Route::post('individual', 'API\ManageController@individual');
 });

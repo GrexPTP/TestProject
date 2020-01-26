@@ -19,11 +19,12 @@ import React, {useState,  useEffect} from "react";
 import { Grid, Row, Col, Table, Form, FormControl, Button } from "react-bootstrap";
 import Card from "../components/Card/Card.jsx";
 import { thArray, tdArray } from "../variables/Variables.jsx";
-import {getEmployeesStart} from '../redux/reducer/employeesReducer/actions'
+import {getListStart} from '../redux/reducer/manageReducer/actions'
 import {useDispatch, useSelector} from 'react-redux'
 
 const TableList = (props) => {
-  let users = useSelector(state => state.employees.employees) 
+  const currentPath = useSelector(state => state.router.location.pathname)
+  let users = useSelector(state => state.manage.list) 
   if (!users) users = []
   const token = useSelector(state => state.auth.token)
   const dispatch = useDispatch()
@@ -40,7 +41,12 @@ const TableList = (props) => {
     console.log(`${id} download image`)
   }
   useEffect(() => {
-    dispatch(getEmployeesStart(token))
+    const path = currentPath.split('/')
+    if (path[2] == 'employees'){
+      dispatch(getListStart(token, 2))
+    } else if (path[2] == 'users') {
+      dispatch(getListStart(token,3))
+    }
   }, [])
     return (
       <div className="content">
