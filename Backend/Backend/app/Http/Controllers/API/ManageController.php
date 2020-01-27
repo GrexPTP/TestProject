@@ -10,7 +10,7 @@ use Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
+use Madzipper;
 
 
 class ManageController extends Controller
@@ -64,5 +64,12 @@ class ManageController extends Controller
     public function delete(Request $request){
         User::destroy($request->id);
         return response()->json(['success' => 'deleted'], 200); 
+    }
+    public function download(Request $request){
+        
+        $fileName = Str::random(40);
+        $filepath = public_path('\storage\zip\\'.$request->id.'\\'.$fileName.'.zip');
+        Madzipper::make($filepath)->add(public_path('\storage\image\\'.$request->id))->close();
+        return redirect('storage\zip\\'.$request->id.'\\'.$fileName.'.zip');
     }
 }

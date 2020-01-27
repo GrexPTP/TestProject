@@ -44,7 +44,7 @@ const TableList = (props) => {
     
   }
   const download = (id) => {
-    console.log(`${id} download image`)
+    window.open(`http://127.0.0.1:8000/api/download-image?id=${id}`)
   }
   useEffect(() => {
     const path = currentPath.split('/')
