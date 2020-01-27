@@ -31,12 +31,12 @@ import Button from "../components/CustomButton/CustomButton.jsx";
 import ImageUploader from 'react-images-upload';
 import {useSelector, useDispatch} from 'react-redux'
 import {updateProfileStart} from '../redux/reducer/userReducer/actions'
-import {getIndividualStart, updateIndividualStart} from '../redux/reducer/manageReducer/actions'
+import {getIndividualStart, updateIndividualStart, createIndividualStart} from '../redux/reducer/manageReducer/actions'
 const UserProfile = () => {
   const dispatch = useDispatch()
   const currentPath = useSelector(state => state.router.location.pathname)
   const token = useSelector(state => state.auth.token)
-  let user = {id: 0, email: '', name: '', id_number: '', phone: '', avartar: "[]", front_id: "[]", back_id: "[]"}
+  let user = {id: 0, email: '', name: '', id_number: '', phone: '', avartar: "[]", front_id: "[]", back_id: "[]", role_id : 0}
   const onDropAva = (pictureFiles, pictureDataURLs) => {
     setAvaPictures(pictureDataURLs)
   }
@@ -51,7 +51,13 @@ const UserProfile = () => {
     e.preventDefault()
     if (currentPath === '/admin/profile') {
       dispatch(updateProfileStart(token, {password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures}))
-    } else {
+    } else if ( currentPath === '/admin/new-employee') {
+      dispatch(createIndividualStart({email, password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures, role_id : 2}))
+    } 
+    else if ( currentPath === '/admin/new-user') {
+      dispatch(createIndividualStart({email, password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures, role_id : 3}))
+    } 
+    else {
       const path = currentPath.split('/')
       dispatch(updateIndividualStart(token, {id: path[3] ,password, confirmPassword, name, IDNumber, phone, avaPictures, frontPictures, backPictures}))
   
@@ -64,15 +70,21 @@ const UserProfile = () => {
   }, [])
   if (currentPath === '/admin/profile') {
     user = useSelector(state => state.user.user)
+  } else if (currentPath === '/admin/new-user') {
+      user.role_id = 3
+  } else if (currentPath === '/admin/new-employee') {
+      user.role_id = 2
   } else {
     const temp = useSelector(state => state.manage.individual)
     if (temp) user = temp
 
   }
   
+
   const [avaPictures, setAvaPictures] = useState(JSON.parse(user.avartar ? user.avartar : '[]' ))
   const [frontPictures, setFrontPictures] = useState(JSON.parse(user.front_id ?  user.front_id : '[]'))
   const [backPictures, setBackPictures] = useState(JSON.parse(user.back_id ? user.back_id : '[]'))
+  const [email, setEmail] = useState(user.email)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [name, setName] = useState(user.name)
@@ -93,12 +105,13 @@ const UserProfile = () => {
                       properties={[
                         
                         { 
+                          onChange: e => setEmail(e.target.value),
                           label: "Email address",
                           type: "email",
                           bsClass: "form-control",
                           placeholder: "Email",
-                          defaultValue: user.email,
-                          disabled : true
+                          value: email,
+                          disabled : currentPath !== '/admin/new-user' && currentPath !== '/admin/new-employee'
                         },
                         {
                           onChange: e => setPassword(e.target.value),
@@ -211,7 +224,7 @@ const UserProfile = () => {
                       </Col>
                     </Row>
                     <Button bsStyle="info" pullRight fill type="submit" onClick={handleSubmit}>
-                      Update Profile
+                      {currentPath === '/admin/new-user' || currentPath === '/admin/new-employee' ? 'Create Profile' : 'Update Profile'}
                     </Button>
                     <div className="clearfix" />
                   </form>

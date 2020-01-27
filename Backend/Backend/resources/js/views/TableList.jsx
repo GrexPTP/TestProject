@@ -19,7 +19,7 @@ import React, {useState,  useEffect} from "react";
 import { Grid, Row, Col, Table, Form, FormControl, Button } from "react-bootstrap";
 import Card from "../components/Card/Card.jsx";
 import { thArray, tdArray } from "../variables/Variables.jsx";
-import {getListStart} from '../redux/reducer/manageReducer/actions'
+import {getListStart, deleteIndividualStart} from '../redux/reducer/manageReducer/actions'
 import {useDispatch, useSelector} from 'react-redux'
 
 const TableList = (props) => {
@@ -32,10 +32,16 @@ const TableList = (props) => {
     props.history.push(`/admin/${props.objectName.toLowerCase()}/${id}`)
   }
   const deleteObject = id => {
-    console.log(`${id} delete`)
+    dispatch(deleteIndividualStart(token, id))
   }
   const add = () => {
-    props.history.push('/admin/profile')
+    const path = currentPath.split('/')
+    if (path[2] == 'employees'){
+      props.history.push('/admin/new-employee')
+    } else if (path[2] == 'users') {
+      props.history.push('/admin/new-user')
+    }
+    
   }
   const download = (id) => {
     console.log(`${id} download image`)

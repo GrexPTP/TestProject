@@ -44,3 +44,30 @@ export const updateIndividualFailure = error => ({
     type: ManageActionTypes.UPDATE_INDIVIDUAL_FAILURE,
     payload: error
 })
+export const createIndividualStart = userData => ({
+    type: ManageActionTypes.CREATE_INDIVIDUAL_START,
+    payload: userData
+})
+export const createIndividualSuccess = token => ({
+    type: ManageActionTypes.CREATE_INDIVIDUAL_SUCCESS,
+    payload: token
+})
+export const createIndividualFailure = error => ({
+    type: ManageActionTypes.CREATE_INDIVIDUAL_FAILURE,
+    payload: error
+})
+export const deleteIndividualStart = (token, id) => ({
+    type: ManageActionTypes.DELETE_INDIVIDUAL_START,
+    payload: {
+        token,
+        id
+    }
+})
+export const deleteIndividualSuccess = individual => ({
+    type: ManageActionTypes.DELETE_INDIVIDUAL_SUCCESS,
+    payload: individual
+})
+export const deleteIndividualFailure = error => ({
+    type: ManageActionTypes.DELETE_INDIVIDUAL_FAILURE,
+    payload: error
+})

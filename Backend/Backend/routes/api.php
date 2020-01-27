@@ -21,4 +21,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('list', 'API\ManageController@list');
     Route::post('individual', 'API\ManageController@individual');
     Route::post('update_individual', 'API\ManageController@updateIndividual');
+    Route::post('delete_individual', 'API\ManageController@delete');
 });

@@ -61,4 +61,8 @@ class ManageController extends Controller
         $user->save();
         return response()->json(['success' => $user], 200); 
     }
+    public function delete(Request $request){
+        User::destroy($request->id);
+        return response()->json(['success' => 'deleted'], 200); 
+    }
 }

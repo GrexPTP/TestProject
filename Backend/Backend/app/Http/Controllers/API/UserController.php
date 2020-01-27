@@ -40,9 +40,10 @@ public $successStatus = 200;
             'password' => 'required', 
             'c_password' => 'required|same:password',
             'phone' => 'nullable|max:10',
-            'id_number' => 'nullable|max:11' 
+            'id_number' => 'nullable|max:11',
+            'role_id' => 'required' 
         ]);
-if ($validator->fails()) { 
+        if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
         $input = $request->all(); 

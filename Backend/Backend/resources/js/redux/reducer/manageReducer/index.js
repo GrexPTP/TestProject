@@ -36,6 +36,12 @@ const manageReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 error: action.payload
             }
+        case ManageActionTypes.CREATE_INDIVIDUAL_FAILURE:
+        case ManageActionTypes.DELETE_INDIVIDUAL_FAILURE:
+            return {
+                ...state,
+                error: action.payload
+            }
         default:
             return state
     }

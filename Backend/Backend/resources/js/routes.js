@@ -42,6 +42,22 @@ const dashboardRoutes = [
     visible: true
   },
   {
+    path: "/new-user",
+    name: "Create New User",
+    icon: "pe-7s-user",
+    component: UserProfile,
+    layout: "/admin",
+    visible: false
+  },
+  {
+    path: "/new-employee",
+    name: "Create New Employee",
+    icon: "pe-7s-user",
+    component: UserProfile,
+    layout: "/admin",
+    visible: false
+  },
+  {
     path: "/users/:id",
     name: "User Detail",
     icon: "pe-7s-users",
