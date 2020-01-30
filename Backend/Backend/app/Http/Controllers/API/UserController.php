@@ -21,7 +21,7 @@ public $successStatus = 200;
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken(request('email'))-> accessToken; 
-            return response()->json(['success' => $success['token']], $this-> successStatus); 
+            return response()->json(['success' => $success['token'], 'role' => $user->role], $this-> successStatus); 
         } 
         else{ 
             return response()->json(['error'=>'Unauthorised'], 401); 
@@ -61,6 +61,8 @@ public $successStatus = 200;
      */ 
     public function details(Request $request) 
     {   
+
+        return response()->json(['success' => $request->header()], $this-> successStatus); 
         $user = Auth::user();
         $user['role'] = $user->role()->pluck('role')[0]; 
         return response()->json(['success' => $user], $this-> successStatus); 

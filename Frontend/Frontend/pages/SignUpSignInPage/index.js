@@ -13,7 +13,7 @@ const SignUpSignInPage = ({ navigation }) => (
     <Header>Login</Header>
 
     <Paragraph>
-      Save your health, save the environment
+      Test Project
     </Paragraph>
     <Button mode="contained" onPress={() => navigation.navigate('LoginPage')}>
       Login

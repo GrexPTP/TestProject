@@ -9,18 +9,14 @@ import TextInput from '../../components/TextInput';
 import BackButton from '../../components/BackButton';
 import { theme } from '../../core/theme';
 import { emailValidator, passwordValidator } from '../../core/utils';
-import {signInSuccess} from '../../redux/reducers/AuthReducer/actions'
-
-
+import {loginStart} from '../../redux/reducer/authReducer/actions'
+import {getUserStart} from '../../redux/reducer/userReducer/actions'
 
 const LoginPage = ({ navigation }) => {
   const dispatch = useDispatch()
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
-  const signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    navigation.navigate('User');
-  };
+  
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -31,17 +27,8 @@ const LoginPage = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    dispatch(signInSuccess({email, password, role : 'Employee'}))
-    signInAsync()
-    // fetch(`http://13.76.100.205/api/login?email=${email.value}&password=${password.value}`, {
-    // }).then(response => response.json())
-    // .then(results => {
-    //     if (results) {
-    //         navigation.navigate('HomePage');
-    //         setGlobal({user: results})
-    //     } 
-    //     return
-    // })
+    dispatch(loginStart({email:email.value,password: password.value}, navigation))
+    
   };
 
   return (

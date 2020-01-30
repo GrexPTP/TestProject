@@ -1,31 +1,27 @@
-import AuthActionTypes from "./types";
-
+import AuthActionTypes from './types'
 const INITIAL_STATE = {
-    currentUser: null,
-    error: null,
     token: null,
-    role: 'user'
-};
-
+    role: null,
+    error: null,
+}
 const authReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case AuthActionTypes.SIGN_IN_SUCCESS:
+        case AuthActionTypes.SIGN_UP_SUCCESS:
+        case AuthActionTypes.LOGIN_SUCCESS:
             return {
                 ...state,
-                currentUser: action.payload.user,
                 token: action.payload.token,
-                role: action.payload.user.role,
+                role:   action.payload.role,
                 error: null
             };
         case AuthActionTypes.SIGN_OUT_SUCCESS:
             return {
                 ...state,
-                currentUser: null,
                 token: null,
                 role: null,
                 error: null
             };
-        case AuthActionTypes.SIGN_IN_FAILURE:
+        case AuthActionTypes.LOGIN_FAILURE:
         case AuthActionTypes.SIGN_OUT_FAILURE:
         case AuthActionTypes.SIGN_UP_FAILURE:
             return {

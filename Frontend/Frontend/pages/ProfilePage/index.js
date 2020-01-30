@@ -8,26 +8,37 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
-import {useDispatch} from 'react-redux'
-import {signOutSuccess} from '../../redux/reducers/AuthReducer/actions'
+import {connect} from 'react-redux'
+import {signOutStart} from '../../redux/reducer/authReducer/actions'
+import {updateProfileStart} from '../../redux/reducer/userReducer/actions'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import {Button, Provider, Portal, Modal, TextInput} from 'react-native-paper'
 
-export default class ProfilePage extends Component {
+class ProfilePage extends Component {
   state = {
-    image: null,
-    front: null,
-    back: null,
+    avaPictures: JSON.parse(this.props.currentUser.avartar ? this.props.currentUser.avartar : '[]' ),
+    frontPictures: JSON.parse(this.props.currentUser.front_id ? this.props.currentUser.front_id : '[]' ),
+    backPictures: JSON.parse(this.props.currentUser.back_id ? this.props.currentUser.back_id : '[]' ),
     buttonType: 'profile',
-    cameraVisible: false
+    cameraVisible: false,
+    email: this.props.currentUser.email,
+    password: '',
+    confirmPassword: '',
+    name: this.props.currentUser.name,
+    phone: this.props.currentUser.phone,
+    address: this.props.currentUser.address,
+    IDNumber: this.props.currentUser.id_number,
+    displayAva: null,
+    displayFront: null,
+    displayBack: null
   };
-   
-
   componentDidMount() {
     this.getPermissionAsync();
-    console.log('hi');
+    this.setState({displayAva: `http://192.168.0.105${this.state.avaPictures.slice(-1)[0]}`,
+    displayFront: `http://192.168.0.105${this.state.frontPictures.slice(-1)[0]}`,
+    displayBack: `http://192.168.0.105${this.state.backPictures.slice(-1)[0]}` })
   }
 
   getPermissionAsync = async () => {
@@ -38,41 +49,50 @@ export default class ProfilePage extends Component {
       }
     }
   }
-
+  _update = (token,data) => {
+    //console.log(token, data)
+    this.props.updateProfile(token, data)
+  }
   _pickImage = async (type) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
+      base64: true,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1
     });
 
-    console.log(result);
 
     if (!result.cancelled) {
-      if(type == 'profile')
-      this.setState({ image: result.uri });
-      else if (type == 'front')
-      this.setState({ front: result.uri });
-      else 
-      this.setState({ back: result.uri });
+      if(type == 'profile') {
+        this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpg;base64,${result.base64}`], displayAva: result.uri });
+      } else if (type == 'front') {
+        this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpg;base64,${result.base64}`], displayFront: result.uri });
+      } else {
+        this.setState({ backPictures: [...this.state.backPictures,`data:image/jpg;base64,${result.base64}`], displayBack: result.uri });
+      }
+      
     }
   };
 
   _takeImage = async (type) => {
+    const {avaPictures, frontPictures, backPictures} = this.state
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
+        base64: true,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1
       })
       if (!result.cancelled) {
-        if(type == 'profile')
-      this.setState({ image: result.uri });
-      else if (type == 'front')
-      this.setState({ front: result.uri });
-      else 
-      this.setState({ back: result.uri });
+        if(type == 'profile') {
+          this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpg;base64,${result.base64}`], displayAva: result.uri });
+        } else if (type == 'front') {
+          this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpg;base64,${result.base64}`], displayFront: result.uri });
+        } else {
+          this.setState({ backPictures: [...this.state.backPictures,`data:image/jpg;base64,${result.base64}`], displayBack: result.uri });
+        }
+        
       }
   }
 _modalOpen = () => {
@@ -84,8 +104,18 @@ _modalClose = () => {
 
   render() {
 
-    let { image, cameraVisible, buttonType ,front, back } = this.state;
-
+    let { avaPictures, cameraVisible, buttonType ,frontPictures, backPictures, email, name, address, IDNumber, password, confirmPassword, phone, displayAva, displayFront, displayBack } = this.state;
+    const {navigation, token} = this.props
+    const currentRoute = navigation.state.routeName
+    const avaPic = avaPictures.map((item, key) => {
+      return `http://192.168.0.105${item}`
+    })
+    const frontPic = frontPictures.map((item, key) => {
+      return `http://192.168.0.105${item}`
+    })
+    const backPic = backPictures.map((item, key) => {
+      return `http://192.168.0.105${item}`
+    })
     return (
       <Provider>
         <Portal>
@@ -123,18 +153,18 @@ _modalClose = () => {
             this.setState({buttonType:'profile'})
             this._modalOpen()
           }}>
-          <Image style={styles.avatar} source={{uri: image ? image : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+          <Image style={styles.avatar} source={{uri: displayAva ? displayAva : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
           </TouchableOpacity>
           <View style={styles.body}>
             <View style={styles.bodyContent}>
-            <Text style={styles.name}>John Doe</Text>
+        <Text style={styles.name}>{`Profile`}</Text>
               <ScrollView style={{minHeight:200, width:'100%'}}>
-              <TextInput label='Email' mode='outlined'/>
+              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.target.value})}/>
               <TextInput label='Password' mode='outlined' secureTextEntry/>
-              <TextInput label='Full Name' mode='outlined'/>
-              <TextInput label='Phone' mode='outlined'/>
-              <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0}/>
-              <TextInput label='ID Number' mode='outlined'/>
+              <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.target.value})}/>
+              <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.target.value} )}/>
+              <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.target.value})}/>
+              <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.target.value})}/>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around', padding:5}}>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
                 <Text>Front</Text>
@@ -142,7 +172,7 @@ _modalClose = () => {
             this.setState({buttonType:'front'})
             this._modalOpen()
           }}>
-                  <Image style={{height:50, width:120}} source={{uri: front ? front : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+                  <Image style={{height:50, width:120}} source={{uri: displayFront ? displayFront : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
                 </TouchableOpacity>
                 </View>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
@@ -151,18 +181,18 @@ _modalClose = () => {
             this.setState({buttonType:'back'})
             this._modalOpen()
           }}>
-                  <Image style={{height:50, width:120}} source={{uri: back ? back : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+                  <Image style={{height:50, width:120}} source={{uri: displayBack ? displayBack : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
                 </TouchableOpacity>
                 </View>
                 
               </View>
               </ScrollView>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around'}}>
-              <TouchableOpacity style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => this._update(token,{email,password,confirmPassword,name,phone,address,IDNumber,avaPictures,frontPictures, backPictures})}>
                 <Text style={{color:'white'}}>Update</Text>  
               </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={{color:'white'}}>Sign Out</Text>  
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => currentRoute === 'Profile' ? this.props.signOut(this.props.navigation) : navigation.goBack()}>
+        <Text style={{color:'white'}}>{currentRoute === 'Profile' ? 'Sign Out' : 'Return'}</Text>  
               </TouchableOpacity> 
               </View>        
             </View>
@@ -172,6 +202,20 @@ _modalClose = () => {
     );
   }
 }
+const mapStateToProps = state => ({
+  currentUser: state.user.user,
+  token: state.auth.token
+})
+const mapDispatchToProps = dispatch => ({
+    signOut: (navigation) => {
+      dispatch(signOutStart())
+      navigation.navigate('Auth')
+    },
+    updateProfile: (token, data) => {
+      dispatch(updateProfileStart(token, data))
+    }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)
 const styles = StyleSheet.create({
   header:{
     backgroundColor: "#c128f6",
