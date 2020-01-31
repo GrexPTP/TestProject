@@ -20,7 +20,7 @@ public $successStatus = 200;
     public function login(){ 
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken(request('email'))-> accessToken; 
+            $success['token'] =  $user->createToken(request('email'))->accessToken; 
             return response()->json(['success' => $success['token'], 'role' => $user->role], $this-> successStatus); 
         } 
         else{ 
@@ -61,8 +61,7 @@ public $successStatus = 200;
      */ 
     public function details(Request $request) 
     {   
-
-        return response()->json(['success' => $request->header()], $this-> successStatus); 
+        
         $user = Auth::user();
         $user['role'] = $user->role()->pluck('role')[0]; 
         return response()->json(['success' => $user], $this-> successStatus); 
@@ -83,17 +82,20 @@ public $successStatus = 200;
         $user->address = $request['address'] ?? $user->address ;
         $user->id_number = $request['id_number'] ?? $user->id_number ;
         $user->password = $request['password'] ? bcrypt($request['password']) : $user->password;
-        $avatars = [];
-        $front_id = [];
-        $back_id = [];
+        $avatars = $user->avartar ? json_decode($user->avartar) :  [];
+        $front_id = $user->front_id ? json_decode($user->front_id) :  [];
+        $back_id = $user->back_id ? json_decode($user->back_id) :  [];
         $uploader = new Util();
         foreach($request->avaPictures as $image){
+            if(strpos($image, 'base64') !== false)
             array_push($avatars, '/storage/image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
         }
         foreach($request->frontPictures as $image){
+            if(strpos($image, 'base64') !== false)
             array_push($front_id, '/storage/image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
         }
         foreach($request->backPictures as $image){
+            if(strpos($image, 'base64') !== false)
             array_push($back_id, '/storage/image/'.$user->id.'/'.$uploader->saveImgBase64($image, 'image/'.$user->id));
         }
         $user->avartar = json_encode($avatars);

@@ -16,7 +16,7 @@ const Login = () => {
             <Grid style={{padding:'10% 20%'}}>
                 <PageHeader>
                     Dashboard Login
-                </PageHeader>;
+                </PageHeader>
 <Form horizontal>
   <FormGroup controlId="formHorizontalEmail">
     <Col componentClass={ControlLabel} sm={2}>

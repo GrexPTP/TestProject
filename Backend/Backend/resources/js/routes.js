@@ -89,38 +89,38 @@ const dashboardRoutes = [
     layout: "/admin",
     visible: true
   },
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: "pe-7s-news-paper",
-    component: Typography,
-    layout: "/admin",
-    visible: true
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "pe-7s-science",
-    component: Icons,
-    layout: "/admin",
-    visible: true
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "pe-7s-map-marker",
-    component: Maps,
-    layout: "/admin",
-    visible: true
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "pe-7s-bell",
-    component: Notifications,
-    layout: "/admin",
-    visible: true
-  }
+  // {
+  //   path: "/typography",
+  //   name: "Typography",
+  //   icon: "pe-7s-news-paper",
+  //   component: Typography,
+  //   layout: "/admin",
+  //   visible: true
+  // },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   icon: "pe-7s-science",
+  //   component: Icons,
+  //   layout: "/admin",
+  //   visible: true
+  // },
+  // {
+  //   path: "/maps",
+  //   name: "Maps",
+  //   icon: "pe-7s-map-marker",
+  //   component: Maps,
+  //   layout: "/admin",
+  //   visible: true
+  // },
+  // {
+  //   path: "/notifications",
+  //   name: "Notifications",
+  //   icon: "pe-7s-bell",
+  //   component: Notifications,
+  //   layout: "/admin",
+  //   visible: true
+  // }
 ];
 
 export default dashboardRoutes;

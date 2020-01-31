@@ -20,7 +20,7 @@ const SignUp = () => {
           <Grid style={{padding:'10% 20%'}}>
               <PageHeader>
                     Dashboard Signup
-              </PageHeader>;
+              </PageHeader>
           <Form horizontal>
     <FormGroup controlId="formHorizontalName">
     <Col componentClass={ControlLabel} sm={2}>
