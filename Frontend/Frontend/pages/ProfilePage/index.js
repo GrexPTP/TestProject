@@ -36,9 +36,9 @@ class ProfilePage extends Component {
   };
   componentDidMount() {
     this.getPermissionAsync();
-    this.setState({displayAva: `http://192.168.0.105${this.state.avaPictures.slice(-1)[0]}`,
-    displayFront: `http://192.168.0.105${this.state.frontPictures.slice(-1)[0]}`,
-    displayBack: `http://192.168.0.105${this.state.backPictures.slice(-1)[0]}` })
+    this.setState({displayAva: `http://tkb.miennam24h.vn${this.state.avaPictures.slice(-1)[0]}`,
+    displayFront: `http://tkb.miennam24h.vn${this.state.frontPictures.slice(-1)[0]}`,
+    displayBack: `http://tkb.miennam24h.vn${this.state.backPictures.slice(-1)[0]}` })
   }
 
   getPermissionAsync = async () => {
@@ -50,7 +50,6 @@ class ProfilePage extends Component {
     }
   }
   _update = (token,data) => {
-    //console.log(token, data)
     this.props.updateProfile(token, data)
   }
   _pickImage = async (type) => {
@@ -107,15 +106,7 @@ _modalClose = () => {
     let { avaPictures, cameraVisible, buttonType ,frontPictures, backPictures, email, name, address, IDNumber, password, confirmPassword, phone, displayAva, displayFront, displayBack } = this.state;
     const {navigation, token} = this.props
     const currentRoute = navigation.state.routeName
-    const avaPic = avaPictures.map((item, key) => {
-      return `http://192.168.0.105${item}`
-    })
-    const frontPic = frontPictures.map((item, key) => {
-      return `http://192.168.0.105${item}`
-    })
-    const backPic = backPictures.map((item, key) => {
-      return `http://192.168.0.105${item}`
-    })
+    console.log(email)
     return (
       <Provider>
         <Portal>
@@ -159,12 +150,12 @@ _modalClose = () => {
             <View style={styles.bodyContent}>
         <Text style={styles.name}>{`Profile`}</Text>
               <ScrollView style={{minHeight:200, width:'100%'}}>
-              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.target.value})}/>
+              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})}/>
               <TextInput label='Password' mode='outlined' secureTextEntry/>
-              <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.target.value})}/>
-              <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.target.value} )}/>
-              <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.target.value})}/>
-              <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.target.value})}/>
+              <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})}/>
+              <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
+              <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.nativeEvent.text})}/>
+              <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})}/>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around', padding:5}}>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
                 <Text>Front</Text>
