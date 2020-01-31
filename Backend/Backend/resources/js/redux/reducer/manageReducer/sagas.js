@@ -3,7 +3,7 @@ import ManageActionTypes from './types'
 import {getListSuccess, getListFailure, getIndividualSuccess, getIndividualFailure, updateIndividualSuccess, updateIndividualFailure, createIndividualFailure, deleteIndividualFailure} from './actions'
 export function* getList({payload: {token, role_id}}){
     try {
-        const response = yield fetch('http://127.0.0.1:8000/api/list',{
+        const response = yield fetch('http://tkb.miennam24h.vn/api/list',{
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -22,7 +22,7 @@ export function* getList({payload: {token, role_id}}){
 }
 export function* getIndividual({payload: {token, id}}){
     try {
-        const response = yield fetch('http://127.0.0.1:8000/api/individual',{
+        const response = yield fetch('http://tkb.miennam24h.vn/api/individual',{
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -42,7 +42,7 @@ export function* getIndividual({payload: {token, id}}){
 export function* updateIndividual({payload: {token, data}}){
     try {
         const {id, name, password, confirmPassword, phone, IDNumber, address, avaPictures, frontPictures, backPictures } = data
-        const response = yield fetch('http://127.0.0.1:8000/api/update_individual',{
+        const response = yield fetch('http://tkb.miennam24h.vn/api/update_individual',{
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -70,7 +70,7 @@ export function* updateIndividual({payload: {token, data}}){
 }
 export function* createIndividual({ payload : {name, email, password, confirmPassword, phone, IDNumber, role_id} }) {
     try {
-        const response = yield fetch(`http://127.0.0.1:8000/api/signup`,{
+        const response = yield fetch(`http://tkb.miennam24h.vn/api/signup`,{
           method: 'post',
           headers: {
             'Accept': 'application/json',
@@ -95,7 +95,7 @@ export function* createIndividual({ payload : {name, email, password, confirmPas
 }
 export function* deleteIndividual({payload: {token, id}}){
     try {
-        const response = yield fetch('http://127.0.0.1:8000/api/delete_individual',{
+        const response = yield fetch('http://tkb.miennam24h.vn/api/delete_individual',{
             method: 'post',
             headers: {
                 'Accept': 'application/json',

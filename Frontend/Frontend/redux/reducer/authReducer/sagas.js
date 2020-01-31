@@ -11,7 +11,7 @@ import {
 } from './actions';
 export function* login({payload: {data, navigation}}){
     try {
-        const response = yield fetch(`http://192.168.0.105/api/login`,{
+        const response = yield fetch(`http://tkb.miennam24h.vn/api/login`,{
             method: 'post',
             headers: {
               'Accept': 'application/json',
@@ -33,14 +33,13 @@ export function* login({payload: {data, navigation}}){
 export function* signOut(){
     try {
         yield put(signOutSuccess())
-        yield put(push('/admin/login'));
     } catch (err) {
         yield put(signUpFailure())
     }
 }
 export function* signUp({ payload : {name, email, password, confirmPassword, phone, IDNumber, role_id} }) {
     try {
-        const response = yield fetch(`http://192.168.0.105/api/signup`,{
+        const response = yield fetch(`http://tkb.miennam24h.vn/api/signup`,{
           method: 'post',
           headers: {
             'Accept': 'application/json',
@@ -58,7 +57,7 @@ export function* signUp({ payload : {name, email, password, confirmPassword, pho
         })
         const result =  yield response.json()
         yield put(signUpSuccess(result.success))
-        yield put(push('/admin/dashboard'));  
+        yield navigation.navigate('Auth')
     } catch(err) {
         yield put(signUpFailure(err))
     }

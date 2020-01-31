@@ -12,7 +12,7 @@ import {
 } from './actions';
 export function* login({payload: {email, password}}){
     try {
-        const response = yield fetch(`http://127.0.0.1:8000/api/login`,{
+        const response = yield fetch(`http://tkb.miennam24h.vn/api/login`,{
             method: 'post',
             headers: {
               'Accept': 'application/json',
@@ -40,7 +40,7 @@ export function* signOut(){
 }
 export function* signUp({ payload : {name, email, password, confirmPassword, phone, IDNumber, role_id} }) {
     try {
-        const response = yield fetch(`http://127.0.0.1:8000/api/signup`,{
+        const response = yield fetch(`http://tkb.miennam24h.vn/api/signup`,{
           method: 'post',
           headers: {
             'Accept': 'application/json',

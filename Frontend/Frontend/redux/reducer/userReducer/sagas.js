@@ -3,7 +3,7 @@ import UserActionTypes from './types'
 import { getUserSuccess, getUserFailure, updateProfileSuccess, updateProfileFailure} from './actions'
 export function* getUser({payload}){
     try {
-        const response = yield fetch('http://192.168.0.105/api/details',{
+        const response = yield fetch('http://tkb.miennam24h.vn/api/details',{
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -22,7 +22,7 @@ export function* getUser({payload}){
 export function* updateProfile({payload: {token, data}}){
     try{
         const {name, password, confirmPassword, phone, IDNumber, address, avaPictures, frontPictures, backPictures } = data
-        const response = yield fetch('http://192.168.0.105/api/update_profile',{
+        const response = yield fetch('http://tkb.miennam24h.vn/api/update_profile',{
             method: 'post',
             headers: {
                 'Accept': 'application/json',

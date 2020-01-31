@@ -5,13 +5,20 @@ import {createAppContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import ProfilePage from '../ProfilePage'
 import Constants from 'expo-constants';
+import {useSelector, useDispatch} from 'react-redux'
+import {getListStart} from '../../redux/reducer/manageReducer/actions'
 
 
 const SearchPage = ({navigation}) => {
     const [query, setQuery] = useState('')
-    const [items, setItems] = useState([])
+    const items = useSelector(state => state.manage.list)
     const [filter, setFilter] = useState([])
-    useEffect(() => makeRemoteRequest()
+    const role = useSelector(state => state.auth.role)
+    const token = useSelector(state => state.auth.token)
+    const dispatch = useDispatch()
+    useEffect(() => {
+      dispatch(getListStart(token, role == 'Admin' ? 2 : 3))
+    } 
     , [])
     const makeRemoteRequest = () => {    
         const url = `https://randomuser.me/api/?&results=20`;
@@ -19,17 +26,18 @@ const SearchPage = ({navigation}) => {
           .then(res => res.json())      
           .then(res => { 
               setItems(res.results)       
-              setFilter(res.results)      
+              setFilter(res.results)  
+              console.log(role)    
          })      
       };
 
-      const Item = ({title,subtitle, avatar}) => {
+      const Item = ({name, email, avatar, id}) => {
         return (
             <View style={{flex:1}}>
-                <TouchableOpacity onPress={() => GoToDetail(1)}>
+                <TouchableOpacity onPress={() => GoToDetail(id)}>
                 <List.Item
-                    title={title}
-                    description={subtitle}
+                    title={name}
+                    description={email}
                     left={() =><Avatar.Image size={42} source={{uri:  avatar}}/>}
                 > 
                 
@@ -72,10 +80,11 @@ const SearchPage = ({navigation}) => {
         <FlatList          
     data={items}          
     renderItem={({ item }) => ( 
-      <Item              
-        title={`${item.name.first} ${item.name.last}`}  
-        subtitle={item.email}                           
-        avatar={item.picture.thumbnail}   
+      <Item 
+        id = {item.id}             
+        name={item.name}  
+        email={item.email}                           
+        avatar={item.avartar ? item.avartar.slice(-1)[0] : 'https://bootdey.com/img/Content/avatar/avatar6.png'}   
         
        />          
      )}          
@@ -90,7 +99,7 @@ const AppNavigator = createStackNavigator({
     Users: {
       screen: SearchPage,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     Detail: {
