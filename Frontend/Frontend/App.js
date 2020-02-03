@@ -17,9 +17,6 @@ import {Ionicons} from '@expo/vector-icons';
 import SearchPage from './pages/SearchPage';
 
 
-
-
-
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
   let iconName;
@@ -52,7 +49,7 @@ const UserRouter = createBottomTabNavigator({
         getTabBarIcon(navigation, focused, tintColor),
     }),
     tabBarOptions: {
-      activeTintColor: 'purple',
+      activeTintColor: '#600EE6',
       inactiveTintColor: 'gray',
     },
 });
@@ -61,7 +58,8 @@ const EmployeeRouter = createBottomTabNavigator({
     screen: HomePage
   },
   Users: {
-    screen: SearchPage
+    screen: SearchPage,
+    params: { name: 'Users' }
   },
   Profile: {
       screen: ProfilePage
@@ -73,7 +71,7 @@ const EmployeeRouter = createBottomTabNavigator({
         getTabBarIcon(navigation, focused, tintColor),
     }),
     tabBarOptions: {
-      activeTintColor: 'purple',
+      activeTintColor: '#600EE6',
       inactiveTintColor: 'gray',
     },
 });
@@ -81,11 +79,16 @@ const AdminRouter = createBottomTabNavigator({
   Home: {
     screen: HomePage
   },
-  Employee: {
-    screen: SearchPage
+  Employees: {
+    screen: SearchPage,
+    params: { name: 'Employees' }
+  },
+  Users: {
+    screen: SearchPage,
+    params: { name: 'Users' }
   },
   Profile: {
-      screen: ProfilePage
+    screen: ProfilePage
   }
 }, {
   initialRouteName: "Home",
@@ -94,7 +97,7 @@ const AdminRouter = createBottomTabNavigator({
         getTabBarIcon(navigation, focused, tintColor),
     }),
     tabBarOptions: {
-      activeTintColor: 'purple',
+      activeTintColor: '#600EE6',
       inactiveTintColor: 'gray',
     },
 });

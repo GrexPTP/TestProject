@@ -6,6 +6,8 @@ import manageReducer from './manageReducer'
 export const persistConfig = {
     key: 'root',
     storage:AsyncStorage,
+    whitelist: [authReducer],
+    blacklist: [userReducer, manageReducer]
 };
 const rootReducer = () => combineReducers({
     auth: authReducer,

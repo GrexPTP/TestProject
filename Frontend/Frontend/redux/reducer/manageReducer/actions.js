@@ -14,11 +14,12 @@ export const getListFailure = error => ({
     type: ManageActionTypes.GET_LIST_FAILURE,
     payload: error
 })
-export const getIndividualStart = (token, id) => ({
+export const getIndividualStart = (token, id, navigation) => ({
     type: ManageActionTypes.GET_INDIVIDUAL_START,
     payload: {
         token,
-        id
+        id,
+        navigation
     }
 })
 export const getIndividualSuccess = individual =>({

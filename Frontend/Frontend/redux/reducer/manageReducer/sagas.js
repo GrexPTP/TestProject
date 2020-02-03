@@ -20,7 +20,7 @@ export function* getList({payload: {token, role_id}}){
         yield put(getListFailure(error))
     }    
 }
-export function* getIndividual({payload: {token, id}}){
+export function* getIndividual({payload: {token, id, navigation}}){
     try {
         const response = yield fetch('http://tkb.miennam24h.vn/api/individual',{
             method: 'post',
@@ -35,7 +35,11 @@ export function* getIndividual({payload: {token, id}}){
         })
         const result = yield response.json()
         yield put(getIndividualSuccess(result.success))
+        yield navigation.navigate('Detail',{
+            id
+        })
     } catch (error) {
+        yield console.log(JSON.stringify(error))
         yield put(getIndividualFailure(error))
     }    
 }

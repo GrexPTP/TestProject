@@ -11,34 +11,36 @@ import {
 import {connect} from 'react-redux'
 import {signOutStart} from '../../redux/reducer/authReducer/actions'
 import {updateProfileStart} from '../../redux/reducer/userReducer/actions'
+import {updateIndividualStart} from '../../redux/reducer/manageReducer/actions'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import {Button, Provider, Portal, Modal, TextInput} from 'react-native-paper'
 
+
 class ProfilePage extends Component {
   state = {
-    avaPictures: JSON.parse(this.props.currentUser.avartar ? this.props.currentUser.avartar : '[]' ),
-    frontPictures: JSON.parse(this.props.currentUser.front_id ? this.props.currentUser.front_id : '[]' ),
-    backPictures: JSON.parse(this.props.currentUser.back_id ? this.props.currentUser.back_id : '[]' ),
+    avaPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.avartar ? this.props.individual.avartar : '[]') :(this.props.currentUser.avartar ? this.props.currentUser.avartar : '[]')),
+    frontPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.front_id ? this.props.individual.front_id : '[]') :(this.props.currentUser.front_id ? this.props.currentUser.front_id : '[]')),
+    backPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.back_id ? this.props.individual.back_id : '[]') :(this.props.currentUser.back_id ? this.props.currentUser.back_id : '[]')),
     buttonType: 'profile',
     cameraVisible: false,
-    email: this.props.currentUser.email,
+    email: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.email :this.props.currentUser.email,
     password: '',
     confirmPassword: '',
-    name: this.props.currentUser.name,
-    phone: this.props.currentUser.phone,
-    address: this.props.currentUser.address,
-    IDNumber: this.props.currentUser.id_number,
+    name: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.name :this.props.currentUser.name,
+    phone: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.phone :this.props.currentUser.phone,
+    address: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.address :this.props.currentUser.address,
+    IDNumber: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.id_number :this.props.currentUser.id_number,
     displayAva: null,
     displayFront: null,
     displayBack: null
   };
   componentDidMount() {
     this.getPermissionAsync();
-    this.setState({displayAva: `http://tkb.miennam24h.vn${this.state.avaPictures.slice(-1)[0]}`,
-    displayFront: `http://tkb.miennam24h.vn${this.state.frontPictures.slice(-1)[0]}`,
-    displayBack: `http://tkb.miennam24h.vn${this.state.backPictures.slice(-1)[0]}` })
+    this.setState({displayAva: this.state.avaPictures.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.avaPictures.slice(-1)[0]}` : 'https://bootdey.com/img/Content/avatar/avatar6.png',
+    displayFront: this.state.frontPictures.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.frontPictures.slice(-1)[0]}` : 'https://bootdey.com/img/Content/avatar/avatar6.png',
+    displayBack:  this.state.backPictures.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.backPictures.slice(-1)[0]}` : 'https://bootdey.com/img/Content/avatar/avatar6.png' })
   }
 
   getPermissionAsync = async () => {
@@ -50,7 +52,12 @@ class ProfilePage extends Component {
     }
   }
   _update = (token,data) => {
-    this.props.updateProfile(token, data)
+    if (this.props.navigation.state.routeName == 'Detail') {
+      this.props.updateIndividual(token, data)
+    } else {
+      this.props.updateProfile(token, data)
+    }
+    
   }
   _pickImage = async (type) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,21 +68,20 @@ class ProfilePage extends Component {
       quality: 1
     });
 
-
+    
     if (!result.cancelled) {
       if(type == 'profile') {
-        this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpg;base64,${result.base64}`], displayAva: result.uri });
+        this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], displayAva: result.uri });
       } else if (type == 'front') {
-        this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpg;base64,${result.base64}`], displayFront: result.uri });
+        this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], displayFront: result.uri });
       } else {
-        this.setState({ backPictures: [...this.state.backPictures,`data:image/jpg;base64,${result.base64}`], displayBack: result.uri });
+        this.setState({ backPictures: [...this.state.backPictures,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], displayBack: result.uri });
       }
       
     }
   };
 
   _takeImage = async (type) => {
-    const {avaPictures, frontPictures, backPictures} = this.state
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         base64: true,
@@ -85,11 +91,11 @@ class ProfilePage extends Component {
       })
       if (!result.cancelled) {
         if(type == 'profile') {
-          this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpg;base64,${result.base64}`], displayAva: result.uri });
+          this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpeg;name=bla.jpg;base64,${result.base64}`], displayAva: result.uri });
         } else if (type == 'front') {
-          this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpg;base64,${result.base64}`], displayFront: result.uri });
+          this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpeg;name=bla.jpg;base64,${result.base64}`], displayFront: result.uri });
         } else {
-          this.setState({ backPictures: [...this.state.backPictures,`data:image/jpg;base64,${result.base64}`], displayBack: result.uri });
+          this.setState({ backPictures: [...this.state.backPictures,`data:image/jpeg;name=bla.jpg;base64,${result.base64}`], displayBack: result.uri });
         }
         
       }
@@ -106,7 +112,8 @@ _modalClose = () => {
     let { avaPictures, cameraVisible, buttonType ,frontPictures, backPictures, email, name, address, IDNumber, password, confirmPassword, phone, displayAva, displayFront, displayBack } = this.state;
     const {navigation, token} = this.props
     const currentRoute = navigation.state.routeName
-    console.log(email)
+    console.log(currentRoute)
+    const id = navigation.getParam('id')
     return (
       <Provider>
         <Portal>
@@ -150,7 +157,7 @@ _modalClose = () => {
             <View style={styles.bodyContent}>
         <Text style={styles.name}>{`Profile`}</Text>
               <ScrollView style={{minHeight:200, width:'100%'}}>
-              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})}/>
+              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})} disabled={true}/>
               <TextInput label='Password' mode='outlined' secureTextEntry/>
               <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})}/>
               <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
@@ -179,7 +186,7 @@ _modalClose = () => {
               </View>
               </ScrollView>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around'}}>
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => this._update(token,{email,password,confirmPassword,name,phone,address,IDNumber,avaPictures,frontPictures, backPictures})}>
+              <TouchableOpacity style={styles.buttonContainer} onPress={() => this._update(token,{id,email,password,confirmPassword,name,phone,address,IDNumber,avaPictures,frontPictures, backPictures})}>
                 <Text style={{color:'white'}}>Update</Text>  
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonContainer} onPress={() => currentRoute === 'Profile' ? this.props.signOut(this.props.navigation) : navigation.goBack()}>
@@ -195,7 +202,8 @@ _modalClose = () => {
 }
 const mapStateToProps = state => ({
   currentUser: state.user.user,
-  token: state.auth.token
+  token: state.auth.token,
+  individual: state.manage.individual
 })
 const mapDispatchToProps = dispatch => ({
     signOut: (navigation) => {
@@ -204,12 +212,15 @@ const mapDispatchToProps = dispatch => ({
     },
     updateProfile: (token, data) => {
       dispatch(updateProfileStart(token, data))
+    },
+    updateIndividual: (token,data) => {
+      dispatch(updateIndividualStart(token, data))
     }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)
 const styles = StyleSheet.create({
   header:{
-    backgroundColor: "#c128f6",
+    backgroundColor: "#600EE6",
     height:200,
   },
   avatarOption: {
@@ -268,7 +279,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width:100,
     borderRadius:30,
-    backgroundColor: "#c128f6",
+    backgroundColor: "#600EE6",
     marginRight: 10,
     marginLeft:10
   },

@@ -30,6 +30,8 @@
     "android": {
       "package": "com.yourcompany.yourappname",
       "versionCode": 1
-    }
+    },
+    "androidStatusBarColor": "#600EE6"
+    
   }
 }

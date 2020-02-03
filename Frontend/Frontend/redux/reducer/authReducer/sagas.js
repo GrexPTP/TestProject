@@ -1,5 +1,6 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
 import AuthActionTypes from './types';
+import { purgeStoredState } from 'redux-persist'
 import {
     loginSuccessSuccess,
     loginFailure,
@@ -32,6 +33,7 @@ export function* login({payload: {data, navigation}}){
 }
 export function* signOut(){
     try {
+        yield purgeStoredState()
         yield put(signOutSuccess())
     } catch (err) {
         yield put(signUpFailure())
