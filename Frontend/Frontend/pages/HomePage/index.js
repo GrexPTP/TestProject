@@ -1,9 +1,50 @@
 import React, {useEffect} from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, AsyncStorage} from 'react-native'
-import { Button, Avatar,  Card, Title, Paragraph } from 'react-native-paper';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, AsyncStorage, Image, Dimensions} from 'react-native'
+import {Card, Title, Paragraph, IconButton } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux'
 import {getUserStart} from '../../redux/reducer/userReducer/actions'
-
+import Carousel from 'react-native-snap-carousel'
+import { LinearGradient } from 'expo-linear-gradient';
+const videos = [
+  {
+    id: "WpIAc9by5iU",
+    thumbnail: "https://images.unsplash.com/photo-1579648999496-65a8fa8d77ed?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
+    feature: "Fast",
+    description: "Fast Delivery"
+  }, {
+    id: "sNPnbI1arSE",
+    thumbnail: "https://images.unsplash.com/photo-1580218102234-490e83efd85b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1086&q=80",
+    feature: "Cheap",
+    description: "Cheap Service"
+  }, {
+    id: "VOgFZfRVaww",
+    thumbnail: "https://images.unsplash.com/photo-1577186606264-8bc8d1fdf9e5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+    feature: "Secure",
+    description: "Secure Data"
+  }
+]
+const Item = (item, index) => {
+  console.log(item.item.thumbnail)
+  return(
+   
+          <TouchableOpacity  activeOpacity={0.8} onPress={() => {console.log('hi')}}>
+                <Card style={{margin: 8, height: Dimensions.get('window').height * (2/5) , backgroundColor: '#600EE6', borderRadius: 20}} accessible={true}>
+                {/* <LinearGradient
+                colors={['#E040FB', 'transparent']}
+              style={{  alignItems: 'center', borderRadius: 20, height: '100%' }}> */}
+              <ImageBackground source={{ uri: item.item.thumbnail }} imageStyle={{ borderRadius: 20 }} style={{width: '100%', height: '100%'}}>
+                    <Card.Content style={{alignItems: 'center', justifyContent: 'center', paddingTop: 50 }}>
+            <Title style={{color: 'white'}}>{item.item.feature}</Title>
+            <Paragraph style={{color: 'white'}}>{item.item.description}</Paragraph>
+                </Card.Content>
+                </ImageBackground>
+                {/* </LinearGradient> */}
+                </Card>
+          </TouchableOpacity>
+      
+    
+  )
+}
 const HomePage = ({navigation}) => {
     const dispatch = useDispatch()
     const token = useSelector(state => state.auth.token)
@@ -14,11 +55,51 @@ const HomePage = ({navigation}) => {
     }, [])
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Title style={{color:'white', fontSize: 40, padding: 25, paddingBottom: 10}}>Welcome Back!</Title>
-                <Title style={{color:'white', padding:30, paddingTop: 5,fontSize: 30}}>{name}</Title>
-            </View>
-            {role == 'Admin' && 
+            <Carousel
+            loop={true}
+          data={videos}
+          renderItem={Item}
+          sliderWidth={360}
+          itemWidth={280}
+          layout={'default'}
+          firstItem={0}
+        />
+        
+          <View style={{flexDirection:'row', height:Dimensions.get('window').height * (2/5) }}>
+          <TouchableOpacity style={{width:'50%'}} activeOpacity={0.8} onPress={() => {navigation.navigate('Employees')}}>
+          
+                <Card style={{margin: 8, height:Dimensions.get('window').height * (2/5), backgroundColor: '#600EE6', borderRadius: 20}} accessible={true}>
+                <LinearGradient
+                colors={['#E040FB', 'transparent']}
+              style={{  alignItems: 'center', borderRadius: 20, height: '100%' }}>
+                    <Card.Content style={{alignItems: 'center', justifyContent: 'center', paddingTop: 50 }}>
+                    <Title style={{color: 'white'}}>Employees</Title>
+                    <IconButton
+                    icon="account-tie"
+                    size={30}
+                    onPress={() => navigation.navigate('Employees')}/>
+                </Card.Content>
+                </LinearGradient>
+                </Card>
+                </TouchableOpacity>
+                <TouchableOpacity style={{width:'50%'}}  activeOpacity={0.8} onPress={() => {navigation.navigate('Users')}}>
+                <Card style={{margin: 8, height:Dimensions.get('window').height * (2/5), backgroundColor: '#600EE6', borderRadius: 25}} accessible={true}>
+                <LinearGradient
+                colors={['#E040FB', 'transparent']}
+              style={{  alignItems: 'center', borderRadius: 20, height: '100%' }}>
+                    <Card.Content style={{alignItems: 'center', justifyContent: 'center', paddingTop: 50 }}>
+                    <Title style={{color: 'white'}}>Users</Title>
+                    <IconButton
+                    icon="account"
+                    size={30}
+                    onPress={() => navigation.navigate('Employees')}/>
+                </Card.Content>
+                </LinearGradient>
+                </Card>
+                </TouchableOpacity>
+          </View>
+
+            {/* {role == 'Admin' && 
                 <TouchableOpacity  activeOpacity={0.8} onPress={() => {navigation.navigate('Employees')}}>
                 <Card style={{margin: 8, height: 175, backgroundColor: '#600EE6', borderRadius: 25}} accessible={true}>
                 <ImageBackground source={{ uri: 'https://picsum.photos/700' }} imageStyle={{ borderRadius: 25 }} style={{width: '100%', height: '100%'}}>
@@ -42,7 +123,7 @@ const HomePage = ({navigation}) => {
                 </ImageBackground>
                 </Card>
                 </TouchableOpacity>
-            }
+            } */}
             
         </View>
     )
