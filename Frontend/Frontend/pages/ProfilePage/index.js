@@ -6,7 +6,8 @@ import {
   View,
   Image,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import {connect} from 'react-redux'
 import {signOutStart} from '../../redux/reducer/authReducer/actions'
@@ -153,46 +154,44 @@ _modalClose = () => {
           }}>
           <Image style={styles.avatar} source={{uri: displayAva ? displayAva : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
           </TouchableOpacity>
-          <View style={styles.body}>
+          <View>
             <View style={styles.bodyContent}>
-        <Text style={styles.name}>{`Profile`}</Text>
-              <ScrollView style={{minHeight:200, width:'100%'}}>
+            
+              <ScrollView style={{minHeight: Dimensions.get('window').height * (3/4), width:'100%'}}>
+              <Text style={styles.name}>{`Profile`}</Text>
               <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})} disabled={true}/>
               <TextInput label='Password' mode='outlined' secureTextEntry/>
               <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})}/>
               <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
               <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.nativeEvent.text})}/>
               <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})}/>
-              <View style={{flex:1, flexDirection:'row', justifyContent:'space-around', padding:5}}>
+              <View style={{flex:1, flexDirection:'column', justifyContent:'space-around', padding:5}}>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
-                <Text>Front</Text>
-                <TouchableOpacity style={{height:50, width:120}} onPress={() => {
+                <Text style={{color: 'grey',marginBottom:5}}>Front ID (Press to choose a picure)</Text>
+                <TouchableOpacity style={{height:250, width:400}} onPress={() => {
             this.setState({buttonType:'front'})
             this._modalOpen()
           }}>
-                  <Image style={{height:50, width:120}} source={{uri: displayFront ? displayFront : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+                  <Image style={{height:250, width:400}} source={{uri: displayFront ? displayFront : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
                 </TouchableOpacity>
                 </View>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
-                <Text>Back</Text>
-                <TouchableOpacity style={{height:50, width:120}} onPress={() => {
+                <Text style={{color: 'grey', marginBottom:5}}>Back ID (Press to choose a picure)</Text>
+                <TouchableOpacity style={{height:250, width:400}} onPress={() => {
             this.setState({buttonType:'back'})
             this._modalOpen()
           }}>
-                  <Image style={{height:50, width:120}} source={{uri: displayBack ? displayBack : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+                  <Image style={{height:250, width:400}} source={{uri: displayBack ? displayBack : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
                 </TouchableOpacity>
                 </View>
                 
               </View>
+              <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
+                <Button style={{marginBottom: 5}} mode="outlined" onPress={() => this._update(token,{id,email,password,confirmPassword,name,phone,address,IDNumber,avaPictures,frontPictures, backPictures})}>Update</Button>
+                <Button mode="outlined" onPress={() => currentRoute === 'Profile' ? this.props.signOut(this.props.navigation) : navigation.goBack()}>{currentRoute === 'Profile' ? 'Sign Out' : 'Return'}</Button>
+              </View> 
               </ScrollView>
-              <View style={{flex:1, flexDirection:'row', justifyContent:'space-around'}}>
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => this._update(token,{id,email,password,confirmPassword,name,phone,address,IDNumber,avaPictures,frontPictures, backPictures})}>
-                <Text style={{color:'white'}}>Update</Text>  
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => currentRoute === 'Profile' ? this.props.signOut(this.props.navigation) : navigation.goBack()}>
-        <Text style={{color:'white'}}>{currentRoute === 'Profile' ? 'Sign Out' : 'Return'}</Text>  
-              </TouchableOpacity> 
-              </View>        
+       
             </View>
         </View>
       </View>
@@ -221,25 +220,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)
 const styles = StyleSheet.create({
   header:{
     backgroundColor: "#600EE6",
-    height:200,
+    height: Dimensions.get('window').height * (1/10),
   },
   avatarOption: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
+    width: 49,
+    height: 49,
+    borderRadius: 65,
     borderWidth: 4,
     borderColor: "white",
-    alignSelf:'center',
+    alignSelf:'flex-end',
     position: 'absolute',
-    marginTop:130,
+    right:10
   },
   avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
+    width: 49,
+    height: 49,
+    borderRadius: 65,
     borderWidth: 4,
     borderColor: "white",
-    alignSelf:'center',
+    alignSelf:'flex-end',
     position: 'absolute',
   },
   name:{
@@ -247,13 +246,10 @@ const styles = StyleSheet.create({
     color:"#FFFFFF",
     fontWeight:'600',
   },
-  body:{
-    marginTop:40,
-  },
   bodyContent: {
     flex: 1,
     alignItems: 'center',
-    padding:30,
+    padding:20
   },
   name:{
     fontSize:28,
