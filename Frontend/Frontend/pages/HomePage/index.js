@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, AsyncStorage, Image, Dimensions} from 'react-native'
-import {Card, Title, Paragraph, IconButton } from 'react-native-paper';
+import {Card, Title, Paragraph, IconButton, Caption } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux'
 import {getUserStart} from '../../redux/reducer/userReducer/actions'
 import Carousel from 'react-native-snap-carousel'
@@ -54,20 +54,19 @@ const HomePage = ({navigation}) => {
         dispatch(getUserStart(token))
     }, [])
     return (
-        <View style={styles.container}>
+            <View style={styles.container}>
             <Carousel
-            loop={true}
-          data={videos}
+              loop={true}
+            data={videos}
           renderItem={Item}
-          sliderWidth={360}
+          sliderWidth={Dimensions.get('window').width}
           itemWidth={280}
           layout={'default'}
           firstItem={0}
         />
-        
           <View style={{flexDirection:'row', height:Dimensions.get('window').height * (2/5) }}>
-          <TouchableOpacity style={{width:'50%'}} activeOpacity={0.8} onPress={() => {navigation.navigate('Employees')}}>
-          
+          {role == 'Admin' && 
+               <TouchableOpacity style={{width: role == 'Admin' ? '50%' : '100%'}} activeOpacity={0.8} onPress={() => {navigation.navigate('Employees')}}>
                 <Card style={{margin: 8, height:Dimensions.get('window').height * (2/5), backgroundColor: '#600EE6', borderRadius: 20}} accessible={true}>
                 <LinearGradient
                 colors={['#E040FB', 'transparent']}
@@ -76,13 +75,15 @@ const HomePage = ({navigation}) => {
                     <Title style={{color: 'white'}}>Employees</Title>
                     <IconButton
                     icon="account-tie"
-                    size={30}
+                    size={35}
                     onPress={() => navigation.navigate('Employees')}/>
+                    <Caption>Manage employees</Caption>
                 </Card.Content>
                 </LinearGradient>
                 </Card>
-                </TouchableOpacity>
-                <TouchableOpacity style={{width:'50%'}}  activeOpacity={0.8} onPress={() => {navigation.navigate('Users')}}>
+              </TouchableOpacity> }
+              {(role == 'Employee' || role == 'Admin') &&
+                <TouchableOpacity style={{width: role == 'Admin' ? '50%' : '100%'}}  activeOpacity={0.8} onPress={() => {navigation.navigate('Users')}}>
                 <Card style={{margin: 8, height:Dimensions.get('window').height * (2/5), backgroundColor: '#600EE6', borderRadius: 25}} accessible={true}>
                 <LinearGradient
                 colors={['#E040FB', 'transparent']}
@@ -91,40 +92,14 @@ const HomePage = ({navigation}) => {
                     <Title style={{color: 'white'}}>Users</Title>
                     <IconButton
                     icon="account"
-                    size={30}
+                    size={35}
                     onPress={() => navigation.navigate('Employees')}/>
+                    <Caption>Manage users</Caption>
                 </Card.Content>
                 </LinearGradient>
                 </Card>
-                </TouchableOpacity>
+                </TouchableOpacity>}
           </View>
-
-            {/* {role == 'Admin' && 
-                <TouchableOpacity  activeOpacity={0.8} onPress={() => {navigation.navigate('Employees')}}>
-                <Card style={{margin: 8, height: 175, backgroundColor: '#600EE6', borderRadius: 25}} accessible={true}>
-                <ImageBackground source={{ uri: 'https://picsum.photos/700' }} imageStyle={{ borderRadius: 25 }} style={{width: '100%', height: '100%'}}>
-                    <Card.Content style={{alignItems: 'center', justifyContent: 'center', paddingTop: 50 }}>
-                    <Title style={{color: 'white'}}>Employees Manager</Title>
-                    <Paragraph style={{color: 'white'}}>Press to go to employees manager</Paragraph>
-                </Card.Content>
-                </ImageBackground>
-                </Card>
-                </TouchableOpacity>
-            }
-            
-            {(role == 'Employee' || role == 'Admin') &&
-                <TouchableOpacity activeOpacity={0.8} onPress={() => {navigation.navigate('Users')}}>
-                <Card style={{marginRight: 8, marginLeft: 8, height: 175, backgroundColor: '#600EE6', borderRadius: 25}} accessible={true}>
-                <ImageBackground source={{ uri: 'https://picsum.photos/700' }} imageStyle={{ borderRadius: 25 }} style={{width: '100%', height: '100%'}}>
-                    <Card.Content style={{alignItems: 'center', justifyContent: 'center', paddingTop: 50 }}>
-                    <Title style={{color: 'white'}}>Users Manager</Title>
-                    <Paragraph style={{color: 'white'}}>Press to go to users manager</Paragraph>
-                </Card.Content>
-                </ImageBackground>
-                </Card>
-                </TouchableOpacity>
-            } */}
-            
         </View>
     )
 }

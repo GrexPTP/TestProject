@@ -15,6 +15,8 @@ import {store, persistor} from './redux/store'
 import ProfilePage from  './pages/ProfilePage'
 import {Ionicons} from '@expo/vector-icons';
 import SearchPage from './pages/SearchPage';
+import SearchOrderPage from './pages/SearchOrderPage';
+import OrderPage from './pages/OrderPage';
 
 
 const getTabBarIcon = (navigation, focused, tintColor) => {
@@ -27,10 +29,10 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     iconName = `ios-list`;
   } else if (routeName === 'Profile' ) {
     iconName = `ios-person`;
-  } else if (routeName === 'MyEvents') {
+  } else if (routeName === 'Employees') {
     iconName = `ios-filing`;
-  } else {
-    iconName = `ios-map`
+  }  else {
+    iconName = `ios-pricetag`
   }
   // You can return any component that you like here!
   return <IconComponent name={iconName} size={25} color={tintColor} />;
@@ -38,6 +40,9 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 const UserRouter = createBottomTabNavigator({
   Home: {
     screen: HomePage
+  },
+  Orders: {
+    screen: SearchOrderPage
   },
   Profile: {
       screen: ProfilePage
@@ -60,6 +65,9 @@ const EmployeeRouter = createBottomTabNavigator({
   Users: {
     screen: SearchPage,
     params: { name: 'Users' }
+  },
+  Orders: {
+    screen: SearchOrderPage
   },
   Profile: {
       screen: ProfilePage
@@ -86,6 +94,9 @@ const AdminRouter = createBottomTabNavigator({
   Users: {
     screen: SearchPage,
     params: { name: 'Users' }
+  },
+  Orders: {
+    screen: SearchOrderPage
   },
   Profile: {
     screen: ProfilePage

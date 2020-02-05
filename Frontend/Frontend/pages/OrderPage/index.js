@@ -19,7 +19,7 @@ import * as Permissions from 'expo-permissions';
 import {Button, Provider, Portal, Modal, TextInput} from 'react-native-paper'
 
 
-class ProfilePage extends Component {
+class OrderPage extends Component {
   state = {
     avaPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.avartar ? this.props.individual.avartar : '[]') :(this.props.currentUser.avartar ? this.props.currentUser.avartar : '[]')),
     frontPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.front_id ? this.props.individual.front_id : '[]') :(this.props.currentUser.front_id ? this.props.currentUser.front_id : '[]')),
@@ -33,6 +33,7 @@ class ProfilePage extends Component {
     phone: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.phone :this.props.currentUser.phone,
     address: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.address :this.props.currentUser.address,
     IDNumber: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.id_number :this.props.currentUser.id_number,
+    
     displayAva: null,
     displayFront: null,
     displayBack: null
@@ -203,7 +204,8 @@ _modalClose = () => {
 const mapStateToProps = state => ({
   currentUser: state.user.user,
   token: state.auth.token,
-  individual: state.manage.individual
+  individual: state.manage.individual,
+  role: state.auth.role
 })
 const mapDispatchToProps = dispatch => ({
     signOut: (navigation) => {
@@ -217,7 +219,7 @@ const mapDispatchToProps = dispatch => ({
       dispatch(updateIndividualStart(token, data))
     }
 })
-export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)
+export default connect(mapStateToProps, mapDispatchToProps)(OrderPage)
 const styles = StyleSheet.create({
   header:{
     backgroundColor: "#600EE6",
