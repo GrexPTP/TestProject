@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 Route::post('login', 'API\UserController@login');
 Route::post('signup', 'API\UserController@signup');
 Route::get('download-image','API\ManageController@download');
+Route::post('create_order','API\OrderController@create');
+Route::post('orders','API\OrderController@list');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
     Route::post('update_profile', 'API\UserController@updateProfile');

@@ -5,23 +5,20 @@ import {createAppContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import Constants from 'expo-constants';
 import {useSelector, useDispatch} from 'react-redux'
-import {getListStart, getIndividualStart} from '../../redux/reducer/manageReducer/actions'
+import {getOrdersStart, getOrderStart} from '../../redux/reducer/orderReducer/actions'
 import OrderPage from '../OrderPage';
 
 
 const SearchOrderPage = ({navigation}) => {
     const [query, setQuery] = useState('')
-    const filter = useSelector(state => state.manage.list)
+    const filter = useSelector(state => state.order.orders)
     const [items, setItems] = useState([])
     const role = useSelector(state => state.auth.role)
     const token = useSelector(state => state.auth.token)
     const dispatch = useDispatch()
     const route = navigation.dangerouslyGetParent().getParam('name')
     useEffect(() => {
-      dispatch(getListStart(token, route == 'Employees' ? 2 : 3))
-      navigation.addListener('didFocus', () => {
-        dispatch(getListStart(token, route == 'Employees' ? 2 : 3))
-      });
+      dispatch(getOrdersStart(token))
       console.log(filter)
     }, [])
 
@@ -29,7 +26,7 @@ const SearchOrderPage = ({navigation}) => {
         return (
             <View style={{flex:1}}>
                 <TouchableOpacity onPress={() => {
-                  dispatch(getIndividualStart(token, id, navigation))
+                  dispatch(getOrderStart(token, id, navigation))
                   }}>
                 <List.Item
                     title={name}
@@ -50,9 +47,10 @@ const SearchOrderPage = ({navigation}) => {
     }
 
     const fillQuery = (query) => {
+      console.log(`aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa${JSON.stringify(filter)}`)
         const newData = filter.filter(item => {      
-            const itemData = `${item.name.toUpperCase()} `;
-             const textData = query.toUpperCase(); 
+            const itemData = `${item.id} `;
+             const textData = query; 
              return itemData.indexOf(textData) > -1 && query ;    
           });
           console.log(filter)
@@ -73,9 +71,9 @@ const SearchOrderPage = ({navigation}) => {
     renderItem={({ item }) => ( 
       <Item 
         id = {item.id}             
-        name={item.name}  
+        name={item.id}  
         email={item.email}                           
-        avatar={item.avartar ? item.avartar.slice(-1)[0] : 'https://bootdey.com/img/Content/avatar/avatar6.png'}   
+        avatar={'https://bootdey.com/img/Content/avatar/avatar6.png'}   
         navigation={navigation}
        />          
      )}          

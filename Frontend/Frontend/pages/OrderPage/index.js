@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,39 +10,54 @@ import {
   Dimensions
 } from 'react-native';
 import {connect} from 'react-redux'
-import {signOutStart} from '../../redux/reducer/authReducer/actions'
-import {updateProfileStart} from '../../redux/reducer/userReducer/actions'
-import {updateIndividualStart} from '../../redux/reducer/manageReducer/actions'
+import {createOrderStart, updateOrderStart} from '../../redux/reducer/orderReducer/actions'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import {Button, Provider, Portal, Modal, TextInput} from 'react-native-paper'
-
-
+import {Button, Provider, Portal, Modal, TextInput, FAB} from 'react-native-paper'
+let productsList = [{name: '', price: '', quantity: ''}]
+const Item = ({index,initName,initPrice,initQuantity}) => {
+  const [name, setName] = useState(initName)
+  const [price, setPrice] = useState(initPrice)
+  const [quantity, setQuantity] = useState(initQuantity)
+  return(
+    <View>
+      <TextInput label='Product Name' mode='outlined' value={name} onChange={e => {
+        setName(e.nativeEvent.text)
+        productsList[index]['name'] = name
+      }} />
+              <View style={{flex:1, flexDirection:'row', justifyContent:'space-around'}}>
+              <TextInput style={{width: '49%', marginRight:2}} label='Price' mode='outlined' value={price} onChange={e => {
+                productsList[index]['price'] = e.nativeEvent.text
+                setPrice(e.nativeEvent.text)
+              }} />
+              <TextInput style={{width: '49%', marginLeft:2}} label='Quantity' mode='outlined' value={quantity} onChange={e => {
+                  productsList[index]['quantity'] = e.nativeEvent.text
+                  setQuantity(e.nativeEvent.text)
+              } } />
+      </View>
+    </View>
+    
+  )
+}
 class OrderPage extends Component {
   state = {
-    avaPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.avartar ? this.props.individual.avartar : '[]') :(this.props.currentUser.avartar ? this.props.currentUser.avartar : '[]')),
-    frontPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.front_id ? this.props.individual.front_id : '[]') :(this.props.currentUser.front_id ? this.props.currentUser.front_id : '[]')),
-    backPictures: JSON.parse(this.props.navigation.state.routeName == 'Detail' ? (this.props.individual.back_id ? this.props.individual.back_id : '[]') :(this.props.currentUser.back_id ? this.props.currentUser.back_id : '[]')),
+    images: JSON.parse(this.props.navigation.state.routeName == 'Create' ? '[]' : (this.props.order.images ? this.props.order.images : '[]' )),
     buttonType: 'profile',
     cameraVisible: false,
-    email: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.email :this.props.currentUser.email,
-    password: '',
-    confirmPassword: '',
-    name: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.name :this.props.currentUser.name,
-    phone: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.phone :this.props.currentUser.phone,
-    address: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.address :this.props.currentUser.address,
-    IDNumber: this.props.navigation.state.routeName == 'Detail' ? this.props.individual.id_number :this.props.currentUser.id_number,
-    
-    displayAva: null,
-    displayFront: null,
-    displayBack: null
+    email: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.email,
+    name: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.name,
+    phone: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.phone,
+    address: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.address,
+    IDNumber: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.id_number,
+    items : this.props.navigation.state.routeName == 'Create' ? [{name: '', price: '', quantity: ''}] : JSON.parse(this.props.order.data),
+    display: null
   };
   componentDidMount() {
+    productsList = this.state.items
     this.getPermissionAsync();
-    this.setState({displayAva: this.state.avaPictures.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.avaPictures.slice(-1)[0]}` : 'https://bootdey.com/img/Content/avatar/avatar6.png',
-    displayFront: this.state.frontPictures.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.frontPictures.slice(-1)[0]}` : 'https://bootdey.com/img/Content/avatar/avatar6.png',
-    displayBack:  this.state.backPictures.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.backPictures.slice(-1)[0]}` : 'https://bootdey.com/img/Content/avatar/avatar6.png' })
+    this.setState({
+    display:  this.state.images.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.images.slice(-1)[0]}` : 'https://www.seekpng.com/png/detail/114-1146907_order-delivery-icon-delivery-order-png.png' })
   }
 
   getPermissionAsync = async () => {
@@ -53,13 +68,13 @@ class OrderPage extends Component {
       }
     }
   }
-  _update = (token,data) => {
-    if (this.props.navigation.state.routeName == 'Detail') {
-      this.props.updateIndividual(token, data)
-    } else {
-      this.props.updateProfile(token, data)
+  _update = (token, data) => {
+    if (this.props.navigation.state.routeName == 'Create') {
+      this.props.createOrder(token,data)
+    } 
+    else {
+      this.props.updateOrder(token, data)
     }
-    
   }
   _pickImage = async (type) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -69,17 +84,8 @@ class OrderPage extends Component {
       aspect: [4, 3],
       quality: 1
     });
-
-    
     if (!result.cancelled) {
-      if(type == 'profile') {
-        this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], displayAva: result.uri });
-      } else if (type == 'front') {
-        this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], displayFront: result.uri });
-      } else {
-        this.setState({ backPictures: [...this.state.backPictures,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], displayBack: result.uri });
-      }
-      
+        this.setState({ images: [...this.state.images,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], display: result.uri });
     }
   };
 
@@ -92,15 +98,8 @@ class OrderPage extends Component {
         quality: 1
       })
       if (!result.cancelled) {
-        if(type == 'profile') {
-          this.setState({ avaPictures: [...this.state.avaPictures,`data:image/jpeg;name=bla.jpg;base64,${result.base64}`], displayAva: result.uri });
-        } else if (type == 'front') {
-          this.setState({ frontPictures: [...this.state.frontPictures,`data:image/jpeg;name=bla.jpg;base64,${result.base64}`], displayFront: result.uri });
-        } else {
-          this.setState({ backPictures: [...this.state.backPictures,`data:image/jpeg;name=bla.jpg;base64,${result.base64}`], displayBack: result.uri });
-        }
-        
-      }
+        this.setState({ images: [...this.state.images,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], display: result.uri });
+    }
   }
 _modalOpen = () => {
   this.setState({cameraVisible: true})
@@ -111,10 +110,9 @@ _modalClose = () => {
 
   render() {
 
-    let { avaPictures, cameraVisible, buttonType ,frontPictures, backPictures, email, name, address, IDNumber, password, confirmPassword, phone, displayAva, displayFront, displayBack } = this.state;
+    let { cameraVisible, buttonType, images, email, name, address, IDNumber, phone, display, items } = this.state;
     const {navigation, token} = this.props
     const currentRoute = navigation.state.routeName
-    console.log(currentRoute)
     const id = navigation.getParam('id')
     return (
       <Provider>
@@ -148,52 +146,60 @@ _modalClose = () => {
       
       </Portal>
       <View style={styles.container}>
-          <View style={styles.header}></View>
-          <TouchableOpacity style={styles.avatarOption} onPress={() => {
-            this.setState({buttonType:'profile'})
-            this._modalOpen()
-          }}>
-          <Image style={styles.avatar} source={{uri: displayAva ? displayAva : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
-          </TouchableOpacity>
+        
           <View>
+            
             <View style={styles.bodyContent}>
             
-              <ScrollView style={{minHeight: Dimensions.get('window').height * (3/4), width:'100%'}}>
-              <Text style={styles.name}>{`Profile`}</Text>
-              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})} disabled={true}/>
-              <TextInput label='Password' mode='outlined' secureTextEntry/>
+              <ScrollView style={{minHeight: Dimensions.get('window').height * (5/6), width:'100%'}}>
+              <Text style={styles.name}>{`Order`}</Text>
+              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})}/>
               <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})}/>
               <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
               <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.nativeEvent.text})}/>
               <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})}/>
+              <Text style={styles.name}>{`Order Details`}</Text>
+              {this.state.items.map((item, index) => {
+                return <Item key={index} index={index} initName={item.name} initPrice={item.price} initQuantity={item.quantity} />
+              })}
               <View style={{flex:1, flexDirection:'column', justifyContent:'space-around', padding:5}}>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
-                <Text style={{color: 'grey',marginBottom:5}}>Front ID (Press to choose a picure)</Text>
-                <TouchableOpacity style={{height:250, width:400}} onPress={() => {
-            this.setState({buttonType:'front'})
-            this._modalOpen()
-          }}>
-                  <Image style={{height:250, width:400}} source={{uri: displayFront ? displayFront : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
-                </TouchableOpacity>
-                </View>
-                <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
-                <Text style={{color: 'grey', marginBottom:5}}>Back ID (Press to choose a picure)</Text>
-                <TouchableOpacity style={{height:250, width:400}} onPress={() => {
+                <Text style={{color: 'grey', marginBottom:5}}>Upload the picture of the bill</Text>
+                <TouchableOpacity style={{height:250, width:'100%'}} onPress={() => {
             this.setState({buttonType:'back'})
             this._modalOpen()
           }}>
-                  <Image style={{height:250, width:400}} source={{uri: displayBack ? displayBack : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+                  <Image resizeMode='center' style={{height:250, width:'100%'}} source={{uri: display ? display : 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
                 </TouchableOpacity>
                 </View>
                 
               </View>
               <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
                 
-                <Button style={{marginBottom: 5}} mode="outlined" onPress={() => this._update(token,{id,email,password,confirmPassword,name,phone,address,IDNumber,avaPictures,frontPictures, backPictures})}>Update</Button>
-                <Button mode="outlined" onPress={() => currentRoute === 'Profile' ? this.props.signOut(this.props.navigation) : navigation.goBack()}>{currentRoute === 'Profile' ? 'Sign Out' : 'Return'}</Button>
+        <Button style={{marginBottom: 5}} mode="outlined" onPress={() => this._update(token, {id, email, name, phone, address, id_number:IDNumber, productsList, images})}>{this.props.navigation.state.routeName == 'Create' ? 'Create' : 'Update'}</Button>
+                <Button mode="outlined" onPress={() => navigation.goBack()}>{'Return'}</Button>
               </View> 
+              
               </ScrollView>
-       
+              <FAB 
+    style={styles.fabPlus}
+    small
+    icon="plus"
+    onPress={() => {
+      productsList.push({name: '', price: '', quantity: ''})
+      this.setState({items: productsList})
+    }}
+  />
+  <FAB
+  disabled= {items.length < 2}
+    style={styles.fabMinus}
+    small
+    icon="minus"
+    onPress={() => {
+      productsList.pop()
+      this.setState({items: productsList})
+    }}
+  />
             </View>
         </View>
       </View>
@@ -205,22 +211,34 @@ const mapStateToProps = state => ({
   currentUser: state.user.user,
   token: state.auth.token,
   individual: state.manage.individual,
-  role: state.auth.role
+  role: state.auth.role,
+  order: state.order.order
 })
 const mapDispatchToProps = dispatch => ({
-    signOut: (navigation) => {
-      dispatch(signOutStart())
-      navigation.navigate('Auth')
+    createOrder: (token, data) => {
+      dispatch(createOrderStart(token, data))
     },
-    updateProfile: (token, data) => {
-      dispatch(updateProfileStart(token, data))
-    },
-    updateIndividual: (token,data) => {
-      dispatch(updateIndividualStart(token, data))
+    updateOrder: (token, data) => {
+      dispatch(updateOrderStart(token, data))
     }
+    
 })
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPage)
 const styles = StyleSheet.create({
+  fabPlus: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: -30,
+    backgroundColor: '#600EE6'
+  },
+  fabMinus: {
+    position: 'absolute',
+    margin: 16,
+    right: 50,
+    bottom: -30,
+    backgroundColor: '#600EE6'
+  },
   header:{
     backgroundColor: "#600EE6",
     height: Dimensions.get('window').height * (1/12),
