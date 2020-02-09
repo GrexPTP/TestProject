@@ -19,6 +19,9 @@ const SearchOrderPage = ({navigation}) => {
     const route = navigation.dangerouslyGetParent().getParam('name')
     useEffect(() => {
       dispatch(getOrdersStart(token))
+      navigation.addListener('didFocus', () => {
+        dispatch(getOrdersStart(token))
+      });
       console.log(filter)
     }, [])
 
@@ -47,7 +50,6 @@ const SearchOrderPage = ({navigation}) => {
     }
 
     const fillQuery = (query) => {
-      console.log(`aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa${JSON.stringify(filter)}`)
         const newData = filter.filter(item => {      
             const itemData = `${item.id} `;
              const textData = query; 
@@ -79,8 +81,8 @@ const SearchOrderPage = ({navigation}) => {
      )}          
      keyExtractor={item => item.email}  
                                
-  />          
-  <FAB
+  />  
+  {role !== 'User' &&  <FAB
     style={styles.fab}
     small
     icon="plus"
@@ -88,7 +90,8 @@ const SearchOrderPage = ({navigation}) => {
       navigation.navigate('Create')
       console.log('press')
     }}
-  />
+  />}        
+ 
         </View>
     )
 }

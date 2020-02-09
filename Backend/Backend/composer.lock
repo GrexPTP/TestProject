@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77591a49fe6ac59f08acc5ff2398b802",
+    "content-hash": "b7d7dc3b6a8016809ffe82cc1a048d67",
     "packages": [
+        {
+            "name": "cloudmersive/cloudmersive_ocr_api_client",
+            "version": "1.6.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Cloudmersive/Cloudmersive.APIClient.PHP.OCR.git",
+                "reference": "9d53d42b8d520ff68ab43ebb0a07cd66a8f53a36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Cloudmersive/Cloudmersive.APIClient.PHP.OCR/zipball/9d53d42b8d520ff68ab43ebb0a07cd66a8f53a36",
+                "reference": "9d53d42b8d520ff68ab43ebb0a07cd66a8f53a36",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^6.2",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~1.12",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swagger\\Client\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Cloudmersive",
+                    "homepage": "https://cloudmersive.com"
+                }
+            ],
+            "homepage": "https://cloudmersive.com",
+            "keywords": [
+                "api",
+                "php",
+                "sdk",
+                "swagger"
+            ],
+            "time": "2020-01-04T05:12:37+00:00"
+        },
         {
             "name": "defuse/php-encryption",
             "version": "v2.2.1",

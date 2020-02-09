@@ -65,6 +65,24 @@ const HomePage = ({navigation}) => {
           firstItem={0}
         />
           <View style={{flexDirection:'row', height:Dimensions.get('window').height * (2/5) }}>
+            {role =='User' &&
+            <TouchableOpacity style={{width: '100%'}} activeOpacity={0.8} onPress={() => {navigation.navigate('Orders')}}>
+            <Card style={{margin: 8, height:Dimensions.get('window').height * (2/5), backgroundColor: '#600EE6', borderRadius: 20}} accessible={true}>
+            <LinearGradient
+            colors={['#E040FB', 'transparent']}
+          style={{  alignItems: 'center', borderRadius: 20, height: '100%' }}>
+                <Card.Content style={{alignItems: 'center', justifyContent: 'center', paddingTop: 50 }}>
+                <Title style={{color: 'white'}}>Order</Title>
+                <IconButton
+                icon="database"
+                size={35}
+                onPress={() => navigation.navigate('Orders')}/>
+                <Caption>Search My Orders</Caption>
+            </Card.Content>
+            </LinearGradient>
+            </Card>
+          </TouchableOpacity> 
+            }
           {role == 'Admin' && 
                <TouchableOpacity style={{width: role == 'Admin' ? '50%' : '100%'}} activeOpacity={0.8} onPress={() => {navigation.navigate('Employees')}}>
                 <Card style={{margin: 8, height:Dimensions.get('window').height * (2/5), backgroundColor: '#600EE6', borderRadius: 20}} accessible={true}>
@@ -77,7 +95,7 @@ const HomePage = ({navigation}) => {
                     icon="account-tie"
                     size={35}
                     onPress={() => navigation.navigate('Employees')}/>
-                    <Caption>Manage employees</Caption>
+                    <Caption>Manage Employees</Caption>
                 </Card.Content>
                 </LinearGradient>
                 </Card>
@@ -94,7 +112,7 @@ const HomePage = ({navigation}) => {
                     icon="account"
                     size={35}
                     onPress={() => navigation.navigate('Employees')}/>
-                    <Caption>Manage users</Caption>
+                    <Caption>Manage Users</Caption>
                 </Card.Content>
                 </LinearGradient>
                 </Card>

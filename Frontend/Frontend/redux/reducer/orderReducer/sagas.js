@@ -39,7 +39,7 @@ export function* getOrders({payload}){
 }
 export function* createOrder({payload: {token, data}}){
     try{
-        const {email, name, phone, address, id_number, productsList} = data
+        const {email, name, phone, address, id_number, productsList, images} = data
         const response = yield fetch('http://tkb.miennam24h.vn/api/create_order',{
             method: 'post',
             headers: {
@@ -53,6 +53,7 @@ export function* createOrder({payload: {token, data}}){
                 phone,
                 address,
                 id_number,
+                images,
                 data: productsList
             })
         })

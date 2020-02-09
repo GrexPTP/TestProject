@@ -159,12 +159,12 @@ _modalClose = () => {
             
               <ScrollView style={{minHeight: Dimensions.get('window').height * (3/4), width:'100%'}}>
               <Text style={styles.name}>{`Profile`}</Text>
-              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})} disabled={true}/>
+              <TextInput label='Email' keyboardType="email-address" mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})} disabled={true}/>
               <TextInput label='Password' mode='outlined' secureTextEntry/>
               <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})}/>
-              <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
+              <TextInput label='Phone' keyboardType="number-pad" mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
               <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.nativeEvent.text})}/>
-              <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})}/>
+              <TextInput label='ID Number' keyboardType="number-pad" mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})}/>
               <View style={{flex:1, flexDirection:'column', justifyContent:'space-around', padding:5}}>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
                 <Text style={{color: 'grey',marginBottom:5}}>Front ID (Press to choose a picure)</Text>

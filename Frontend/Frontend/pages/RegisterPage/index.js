@@ -12,6 +12,8 @@ import {
   passwordValidator,
   nameValidator,
 } from '../../core/utils';
+import {signUpStart} from '../../redux/reducer/authReducer/actions'
+import { useDispatch } from 'react-redux';
 
 
 
@@ -19,7 +21,7 @@ const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: '', error: '' });
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
-
+  const dispatch = useDispatch()
   const _onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
@@ -31,8 +33,7 @@ const RegisterScreen = ({ navigation }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-
-    navigation.navigate('HomePage');
+    dispatch(signUpStart({name:name.value, email:email.value, password:password.value, phone: '', address: '', IDnumber: '', role_id: 3}, navigation))
   };
 
   return (

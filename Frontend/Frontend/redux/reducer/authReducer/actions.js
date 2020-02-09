@@ -20,9 +20,9 @@ export const signOutSuccess = () => ({
 export const signOutFailure = () => ({
     type: AuthActionTypes.SIGN_OUT_FAILURE
 }) 
-export const signUpStart = userData => ({
+export const signUpStart = (userData, navigation) => ({
     type: AuthActionTypes.SIGN_UP_START,
-    payload: userData
+    payload: {userData, navigation}
 })
 export const signUpSuccess = (token, role) => ({
     type: AuthActionTypes.SIGN_UP_SUCCESS,

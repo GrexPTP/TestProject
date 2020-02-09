@@ -16,22 +16,22 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import {Button, Provider, Portal, Modal, TextInput, FAB} from 'react-native-paper'
 let productsList = [{name: '', price: '', quantity: ''}]
-const Item = ({index,initName,initPrice,initQuantity}) => {
+const Item = ({index,initName,initPrice,initQuantity, disabled}) => {
   const [name, setName] = useState(initName)
   const [price, setPrice] = useState(initPrice)
   const [quantity, setQuantity] = useState(initQuantity)
   return(
     <View>
-      <TextInput label='Product Name' mode='outlined' value={name} onChange={e => {
+      <TextInput disabled={disabled} label='Product Name' mode='outlined' value={name} onChange={e => {
         setName(e.nativeEvent.text)
         productsList[index]['name'] = name
       }} />
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around'}}>
-              <TextInput style={{width: '49%', marginRight:2}} label='Price' mode='outlined' value={price} onChange={e => {
+              <TextInput keyboardType="numeric"  disabled={disabled} style={{width: '49%', marginRight:2}} label='Price' mode='outlined' value={price} onChange={e => {
                 productsList[index]['price'] = e.nativeEvent.text
                 setPrice(e.nativeEvent.text)
               }} />
-              <TextInput style={{width: '49%', marginLeft:2}} label='Quantity' mode='outlined' value={quantity} onChange={e => {
+              <TextInput keyboardType="numeric" disabled={disabled} style={{width: '49%', marginLeft:2}} label='Quantity' mode='outlined' value={quantity} onChange={e => {
                   productsList[index]['quantity'] = e.nativeEvent.text
                   setQuantity(e.nativeEvent.text)
               } } />
@@ -41,6 +41,10 @@ const Item = ({index,initName,initPrice,initQuantity}) => {
   )
 }
 class OrderPage extends Component {
+  constructor(props){
+    super(props)
+    this.ocr = this.ocr.bind(this)
+  }
   state = {
     images: JSON.parse(this.props.navigation.state.routeName == 'Create' ? '[]' : (this.props.order.images ? this.props.order.images : '[]' )),
     buttonType: 'profile',
@@ -51,13 +55,17 @@ class OrderPage extends Component {
     address: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.address,
     IDNumber: this.props.navigation.state.routeName == 'Create' ? '' :this.props.order.id_number,
     items : this.props.navigation.state.routeName == 'Create' ? [{name: '', price: '', quantity: ''}] : JSON.parse(this.props.order.data),
-    display: null
+    display: null,
+    preDisplay: null,
   };
   componentDidMount() {
     productsList = this.state.items
     this.getPermissionAsync();
     this.setState({
-    display:  this.state.images.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.images.slice(-1)[0]}` : 'https://www.seekpng.com/png/detail/114-1146907_order-delivery-icon-delivery-order-png.png' })
+    display:  this.state.images.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.images.slice(-1)[0]}` : 'https://www.seekpng.com/png/detail/114-1146907_order-delivery-icon-delivery-order-png.png',
+    preDisplay: this.state.images.slice(-1)[0] ? `http://tkb.miennam24h.vn${this.state.images.slice(-1)[0]}` : 'https://www.seekpng.com/png/detail/114-1146907_order-delivery-icon-delivery-order-png.png' 
+  })
+     
   }
 
   getPermissionAsync = async () => {
@@ -67,6 +75,26 @@ class OrderPage extends Component {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
     }
+  }
+  ocr()  {
+    const obj = this
+    fetch('http://tkb.miennam24h.vn/api/ocr',{
+      method: 'post',headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+      body: JSON.stringify({
+        image: this.state.preDisplay
+      })
+    }).then(response => response.json()).then(result => {
+      console.log(result.success)
+      const {address, email, id, name, phone} = result.success
+      console.log(address, email)
+      obj.setState({
+        address: address,email: email,name: name,phone: phone,IDNumber:id
+      })
+    })
+    
   }
   _update = (token, data) => {
     if (this.props.navigation.state.routeName == 'Create') {
@@ -80,12 +108,10 @@ class OrderPage extends Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       base64: true,
-      allowsEditing: true,
-      aspect: [4, 3],
       quality: 1
     });
     if (!result.cancelled) {
-        this.setState({ images: [...this.state.images,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], display: result.uri });
+        this.setState({ images: [...this.state.images,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], display: result.uri, preDisplay: `data:image/jpeg;name=av.jpg;base64,${result.base64}`});
     }
   };
 
@@ -93,12 +119,10 @@ class OrderPage extends Component {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         base64: true,
-        allowsEditing: true,
-        aspect: [4, 3],
         quality: 1
       })
       if (!result.cancelled) {
-        this.setState({ images: [...this.state.images,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], display: result.uri });
+        this.setState({ images: [...this.state.images,`data:image/jpeg;name=av.jpg;base64,${result.base64}`], display: result.uri, preDisplay: `data:image/jpeg;name=av.jpg;base64,${result.base64}` });
     }
   }
 _modalOpen = () => {
@@ -114,6 +138,7 @@ _modalClose = () => {
     const {navigation, token} = this.props
     const currentRoute = navigation.state.routeName
     const id = navigation.getParam('id')
+    const role = this.props.role
     return (
       <Provider>
         <Portal>
@@ -153,19 +178,19 @@ _modalClose = () => {
             
               <ScrollView style={{minHeight: Dimensions.get('window').height * (5/6), width:'100%'}}>
               <Text style={styles.name}>{`Order`}</Text>
-              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})}/>
-              <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})}/>
-              <TextInput label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )}/>
-              <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.nativeEvent.text})}/>
-              <TextInput label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})}/>
+              <TextInput label='Email' mode='outlined' value={email} onChange={ e => this.setState({email: e.nativeEvent.text})} disabled={role === 'User'}/>
+              <TextInput label='Full Name' mode='outlined' value={name} onChange={ e => this.setState({name : e.nativeEvent.text})} disabled={role === 'User'}/>
+              <TextInput keyboardType="number-pad" label='Phone' mode='outlined' value={phone} onChange={ e => this.setState({phone : e.nativeEvent.text} )} disabled={role === 'User'}/>
+              <TextInput label='Address' mode='outlined' multiline  numberOfLines={5.0} value={address} onChange={ e => this.setState({address : e.nativeEvent.text})} disabled={role === 'User'}/>
+              <TextInput keyboardType="number-pad" label='ID Number' mode='outlined' value={IDNumber} onChange={ e => this.setState({IDNumber : e.nativeEvent.text})} disabled={role === 'User'}/>
               <Text style={styles.name}>{`Order Details`}</Text>
               {this.state.items.map((item, index) => {
-                return <Item key={index} index={index} initName={item.name} initPrice={item.price} initQuantity={item.quantity} />
+                return <Item disabled={role == 'User'} key={index} index={index} initName={item.name} initPrice={item.price} initQuantity={item.quantity} />
               })}
               <View style={{flex:1, flexDirection:'column', justifyContent:'space-around', padding:5}}>
                 <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
                 <Text style={{color: 'grey', marginBottom:5}}>Upload the picture of the bill</Text>
-                <TouchableOpacity style={{height:250, width:'100%'}} onPress={() => {
+                <TouchableOpacity disabled={role == 'User'} style={{height:250, width:'100%'}} onPress={() => {
             this.setState({buttonType:'back'})
             this._modalOpen()
           }}>
@@ -175,13 +200,13 @@ _modalClose = () => {
                 
               </View>
               <View style={{flex:1, flexDirection:'column', justifyContent:'space-around'}}>
-                
-        <Button style={{marginBottom: 5}} mode="outlined" onPress={() => this._update(token, {id, email, name, phone, address, id_number:IDNumber, productsList, images})}>{this.props.navigation.state.routeName == 'Create' ? 'Create' : 'Update'}</Button>
+              {role !== 'User' && <Button style={{marginBottom: 5}} mode="outlined" onPress={() => this.ocr()}>Use Data From Photo</Button>} 
+              {role !== 'User' && <Button style={{marginBottom: 5}} mode="outlined" onPress={() => this._update(token, {id, email, name, phone, address, id_number:IDNumber, productsList, images})}>{this.props.navigation.state.routeName == 'Create' ? 'Create' : 'Update'}</Button>}
                 <Button mode="outlined" onPress={() => navigation.goBack()}>{'Return'}</Button>
               </View> 
               
               </ScrollView>
-              <FAB 
+              {role !== 'User' &&  <FAB 
     style={styles.fabPlus}
     small
     icon="plus"
@@ -189,17 +214,19 @@ _modalClose = () => {
       productsList.push({name: '', price: '', quantity: ''})
       this.setState({items: productsList})
     }}
-  />
-  <FAB
-  disabled= {items.length < 2}
-    style={styles.fabMinus}
-    small
-    icon="minus"
-    onPress={() => {
-      productsList.pop()
-      this.setState({items: productsList})
-    }}
-  />
+  /> }
+             {role !== 'User' &&
+             <FAB
+             disabled= {items.length < 2}
+               style={styles.fabMinus}
+               small
+               icon="minus"
+               onPress={() => {
+                 productsList.pop()
+                 this.setState({items: productsList})
+               }}
+             /> } 
+  
             </View>
         </View>
       </View>

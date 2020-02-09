@@ -39,8 +39,9 @@ export function* signOut(){
         yield put(signUpFailure())
     }
 }
-export function* signUp({ payload : {name, email, password, confirmPassword, phone, IDNumber, role_id} }) {
+export function* signUp({ payload : {userData, navigation} }) {
     try {
+        const {name, email, password, phone, IDNumber, role_id} = userData
         const response = yield fetch(`http://tkb.miennam24h.vn/api/signup`,{
           method: 'post',
           headers: {
@@ -51,15 +52,16 @@ export function* signUp({ payload : {name, email, password, confirmPassword, pho
               name,
               email,
               password,
-              c_password: confirmPassword,
+              c_password: password,
               phone,
               id_number: IDNumber,
               role_id
           })
         })
         const result =  yield response.json()
-        yield put(signUpSuccess(result.success))
-        yield navigation.navigate('Auth')
+        yield console.log(result)
+        yield put(signUpSuccess(result.success,result.role.role))
+        yield navigation.navigate('User')
     } catch(err) {
         yield put(signUpFailure(err))
     }

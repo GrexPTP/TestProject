@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('ocr','API\OrderController@ocr');
 Route::fallback(function () {
     return view('welcome');
 });

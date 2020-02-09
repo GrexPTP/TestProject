@@ -4,7 +4,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller; 
 use App\Order; 
-
+use Swagger;
+use GuzzleHttp;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 use Illuminate\Support\Facades\Hash;
@@ -56,6 +57,31 @@ class OrderController extends Controller
         
         $order->save();
         return response()->json(['success' => $order], 200); 
+    }
+    public function ocr(Request $request){
+        $image = $request->image;
+        $uploader = new Util();
+        $link = '';
+        foreach($request->images as $image){
+            if(strpos($image, 'base64') !== false)
+            $link = '/storage/order_temp_image/'.$uploader->saveImgBase64($image, 'order_temp_image/');
+        }
+        $config = Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('Apikey', 'ab633c9a-f692-4c7d-8ef7-8ad36822b468');
+        $apiInstance = new Swagger\Client\Api\ImageOcrApi(
+    
+    
+            new GuzzleHttp\Client(),
+            $config
+        );
+        $image_file = "https://localhost:8000".$link;
+        try {
+            $result = $apiInstance->imageOcrPhotoToText($image_file);
+            $result = explode("\n",$result['text_result']);
+            $rs = ['email' => $result[6], 'name' => $result[8], 'phone' => $result[10], 'address' => $result[12], 'id' => $result[14]];
+            return response()->json(['success' => $rs], 200); 
+        } catch (Exception $e) {
+            return response()->json(['failure' => $e->getMessage()], 200); 
+        }
     }
     //
     // public function list(Request $request){
