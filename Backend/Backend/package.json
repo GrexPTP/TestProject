@@ -36,7 +36,7 @@
         "chartist": "0.10.1",
         "connected-react-router": "^6.6.1",
         "history": "^4.10.1",
-        "node-sass": "4.12.0",
+        "node-sass": "7.0.0",
         "react": "16.8.6",
         "react-bootstrap": "0.32.4",
         "react-chartist": "0.13.3",
